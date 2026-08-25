@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------
+   Obedience Masters — design tokens
+   Brand color palette: Yellow #FFB500 / Black #000000
+   Supporting tones are all derived tints/shades of the two
+   brand colors plus the soft pastel accents used in the
+   approved Figma comps (blush, mint, lavender blobs).
+--------------------------------------------------------- */
+:root {
+  --color-yellow: #ffb500;
+  --color-yellow-dark: #e29e00;
+  --color-yellow-light: #ffd873;
+  --color-yellow-soft: #fff1cf;
+
+  --color-black: #000000;
+  --color-ink: #1a1710; /* body text — warm near-black */
+  --color-ink-muted: #6b6459;
+
+  --color-cream: #fffdf9;
+  --color-blush-50: #fff8f5;
+  --color-blush-100: #fdeee7;
+  --color-blush-200: #fbe0d6;
+
+  --color-mint: #d7f2df;
+  --color-lavender: #efe1fb;
+
+  --color-border: rgba(26, 23, 16, 0.08);
+
+  --font-display: "Baloo 2", ui-rounded, "Segoe UI", sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-yellow: var(--color-yellow);
+  --color-yellow-dark: var(--color-yellow-dark);
+  --color-yellow-light: var(--color-yellow-light);
+  --color-yellow-soft: var(--color-yellow-soft);
+  --color-black: var(--color-black);
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-cream: var(--color-cream);
+  --color-blush-50: var(--color-blush-50);
+  --color-blush-100: var(--color-blush-100);
+  --color-blush-200: var(--color-blush-200);
+  --color-mint: var(--color-mint);
+  --color-lavender: var(--color-lavender);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-yellow);
+  color: var(--color-black);
+}
+
+.wave-divider-top {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  transform: translateY(-99%);
+}
+
+.wave-divider-bottom {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  transform: translateY(99%);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-yellow-dark);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.container-px {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .container-px {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
