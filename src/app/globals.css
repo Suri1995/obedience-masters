@@ -14,7 +14,7 @@
   --color-ink: #000000;
   --color-ink-muted: #000000;
 
-  --color-cream: #ffffff;
+  --color-cream: #000000;
   --color-blush-50: #ffb500;
   --color-blush-100: #ffb500;
   --color-blush-200: #ffb500;
@@ -121,6 +121,46 @@ textarea:focus-visible {
 .container-px {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
+}
+
+/* Reference-led palette enforcement: every surface is black or yellow. */
+.bg-cream,
+.bg-white,
+.bg-blush-50,
+.bg-blush-100,
+.bg-blush-200,
+.bg-mint,
+.bg-lavender {
+  background-color: var(--color-black) !important;
+}
+
+.bg-gradient-to-b,
+.bg-gradient-to-r {
+  background-image: none !important;
+  background-color: var(--color-yellow) !important;
+}
+
+.text-ink,
+.text-ink-muted,
+.text-black {
+  color: var(--color-yellow) !important;
+}
+
+.bg-yellow .text-black,
+.bg-yellow.text-black,
+.bg-black .text-black,
+.bg-black.text-black {
+  color: var(--color-black) !important;
+}
+
+.border-black\/5,
+.border-black\/10,
+.border-black\/20 {
+  border-color: color-mix(in srgb, var(--color-yellow) 35%, transparent) !important;
+}
+
+body {
+  background: var(--color-black);
 }
 
 @media (min-width: 1024px) {
