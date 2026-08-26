@@ -1,31 +1,28 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------
-   Obedience Masters — design tokens
-   Brand color palette: Yellow #FFB500 / Black #000000
-   Supporting tones are all derived tints/shades of the two
-   brand colors plus the soft pastel accents used in the
-   approved Figma comps (blush, mint, lavender blobs).
+   Obedience Masters — two-color design tokens
+   Brand palette: Yellow #FFB500 / Black #000000
 --------------------------------------------------------- */
 :root {
   --color-yellow: #ffb500;
-  --color-yellow-dark: #e29e00;
-  --color-yellow-light: #ffd873;
-  --color-yellow-soft: #fff1cf;
+  --color-yellow-dark: #ffb500;
+  --color-yellow-light: #ffb500;
+  --color-yellow-soft: #ffb500;
 
   --color-black: #000000;
-  --color-ink: #1a1710; /* body text — warm near-black */
-  --color-ink-muted: #6b6459;
+  --color-ink: #000000;
+  --color-ink-muted: #000000;
 
-  --color-cream: #fffdf9;
-  --color-blush-50: #fff8f5;
-  --color-blush-100: #fdeee7;
-  --color-blush-200: #fbe0d6;
+  --color-cream: #ffffff;
+  --color-blush-50: #ffb500;
+  --color-blush-100: #ffb500;
+  --color-blush-200: #ffb500;
 
-  --color-mint: #d7f2df;
-  --color-lavender: #efe1fb;
+  --color-mint: #ffb500;
+  --color-lavender: #ffb500;
 
-  --color-border: rgba(26, 23, 16, 0.08);
+  --color-border: rgba(0, 0, 0, 0.1);
 
   --font-display: "Baloo 2", ui-rounded, "Segoe UI", sans-serif;
   --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;

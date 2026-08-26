@@ -123,12 +123,12 @@ export function CTAForm() {
               </button>
 
               {status === "success" && (
-                <p className="flex items-center gap-2 text-sm font-medium text-emerald-600">
+                <p className="flex items-center gap-2 text-sm font-medium text-black">
                   <CheckCircle2 size={16} /> Thanks! We&rsquo;ll reach out within 24 hours.
                 </p>
               )}
               {status === "error" && (
-                <p className="text-sm font-medium text-red-500">
+                <p className="text-sm font-medium text-black">
                   Something went wrong. Please try again.
                 </p>
               )}
