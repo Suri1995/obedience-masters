@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Quote } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
@@ -27,40 +27,90 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="bg-blush-100 py-24">
-      <div className="container-px mx-auto max-w-[1200px] text-center">
-        <h2 className="text-3xl font-extrabold text-black sm:text-4xl">
+    <section className="bg-yellow-light py-8 md:py-20">
+      <div className="container-px mx-auto max-w-7xl text-center">
+        <p className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-yellow">
+          Testimonials
+        </p>
+        <h2 className="mt-5 text-3xl font-extrabold text-black sm:text-4xl">
           Happy Dogs. <span className="text-yellow-dark">Happier Parents.</span>
         </h2>
-        <p className="mt-4 text-[15px] text-ink-muted">
-          Real stories from pet parents who&rsquo;ve seen the difference training can make.
+        <p className="mx-auto mt-4 max-w-xl text-[15px] text-ink-muted">
+          Real stories from pet parents who&rsquo;ve seen the difference
+          training can make.
         </p>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <div
-              key={t.name}
-              className="relative flex flex-col rounded-3xl bg-white p-7 text-left shadow-[0_16px_40px_-20px_rgba(26,23,16,0.18)]"
-            >
-              <Quote size={28} className="text-yellow" fill="currentColor" strokeWidth={0} />
-              <div className="mt-4 flex items-center gap-3">
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full">
-                  <Image
-                    src={`https://i.pravatar.cc/96?img=${t.avatar}`}
-                    alt={`${t.name}, pet parent`}
-                    fill
-                    sizes="48px"
-                    className="object-cover"
+        <div className="mt-12 grid gap-6 md:grid-cols-3 md:items-center">
+          {testimonials.map((t, i) => {
+            const featured = i === 1;
+            return (
+              <div
+                key={t.name}
+                className={`relative flex flex-col rounded-3xl p-7 text-left transition-all duration-300 ${
+                  featured
+                    ? "bg-black shadow-[0_30px_60px_-20px_rgba(0,0,0,0.5)] md:-translate-y-3 md:scale-[1.04] md:p-8"
+                    : "bg-white shadow-[0_16px_40px_-20px_rgba(0,0,0,0.18)] ring-1 ring-black/5"
+                }`}
+              >
+                <span
+                  className={`grid h-11 w-11 place-items-center rounded-full ${
+                    featured ? "bg-yellow" : "bg-black"
+                  }`}
+                >
+                  <Quote
+                    size={18}
+                    className={featured ? "text-black" : "text-yellow"}
+                    fill="currentColor"
+                    strokeWidth={0}
                   />
+                </span>
+
+                <div className="mt-5 flex items-center gap-0.5">
+                  {Array.from({ length: 5 }).map((_, s) => (
+                    <Star
+                      key={s}
+                      size={14}
+                      className="text-yellow"
+                      fill="currentColor"
+                      strokeWidth={0}
+                    />
+                  ))}
                 </div>
-                <div>
-                  <p className="font-bold text-yellow-dark">{t.name}</p>
-                  <p className="text-sm font-medium text-black">{t.headline}</p>
+
+                <p
+                  className={`mt-4 text-[15px] leading-relaxed ${
+                    featured ? "text-white/90" : "text-ink-muted"
+                  }`}
+                >
+                  {t.quote}
+                </p>
+
+                <div className="mt-6 flex items-center gap-3 border-t border-black/10 pt-5">
+                  <div
+                    className={`relative h-11 w-11 shrink-0 overflow-hidden rounded-full ring-2 ${
+                      featured ? "ring-yellow" : "ring-black/10"
+                    }`}
+                  >
+                    <Image
+                      src={`https://i.pravatar.cc/96?img=${t.avatar}`}
+                      alt={`${t.name}, pet parent`}
+                      fill
+                      sizes="44px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className={`font-bold ${featured ? "text-white" : "text-black"}`}>
+                      {t.name}
+                    </p>
+                    <p className={`text-[13px] ${featured ? "text-white/60" : "text-ink-muted"}`}>
+                      {t.headline}
+                    </p>
+                  </div>
                 </div>
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-ink-muted">{t.quote}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

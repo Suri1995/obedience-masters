@@ -23,12 +23,18 @@ function YoutubeIcon() {
 
 export function Footer() {
   return (
-    <footer className="relative mt-4 bg-yellow pb-10 pt-16">
+    <footer className="relative mt-4 bg-yellow-light pb-10 pt-16">
       <WaveDivider color="var(--color-cream)" position="top" />
 
-      <div className="container-px mx-auto grid max-w-[1200px] gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="container-px mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2 lg:col-span-1">
-          <Logo dark />
+          <img
+          src='/logo.webp'
+          alt="Obedience Masters Logo"
+          width={220}
+          height={73}
+          className="h-auto w-[220px] object-contain"
+          />
         </div>
 
         <div>
@@ -72,7 +78,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container-px mx-auto mt-12 max-w-[1200px] border-t border-black/10 pt-6 text-sm text-black/60">
+      <div className="container-px mx-auto mt-12 max-w-7xl border-t border-black/10 pt-6 text-sm text-black/60">
         © {new Date().getFullYear()} Obedience Masters. All rights reserved.
       </div>
     </footer>

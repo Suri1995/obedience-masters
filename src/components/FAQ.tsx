@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
@@ -30,26 +30,54 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="bg-blush-100 py-24">
-      <div className="container-px mx-auto max-w-[820px]">
-        <h2 className="text-center text-3xl font-extrabold text-yellow-dark sm:text-4xl">FAQ&rsquo;s</h2>
+    <section className="bg-cream py-24">
+      <div className="container-px mx-auto max-w-7xl">
+        <div className="text-center">
+          <p className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-yellow">
+            Got Questions?
+          </p>
+          <h2 className="mt-5 text-3xl font-extrabold text-black sm:text-4xl">
+            Frequently Asked <span className="text-yellow-dark">Questions</span>
+          </h2>
+        </div>
 
         <div className="mt-10 flex flex-col gap-3">
           {faqs.map((item, i) => {
             const isOpen = openIndex === i;
             return (
-              <div key={item.q} className="overflow-hidden rounded-2xl bg-white shadow-[0_10px_26px_-16px_rgba(26,23,16,0.2)]">
+              <div
+                key={item.q}
+                className={`overflow-hidden rounded-2xl bg-white transition-shadow duration-300 ${
+                  isOpen
+                    ? "shadow-[0_16px_36px_-16px_rgba(0,0,0,0.25)] ring-1 ring-black/10"
+                    : "shadow-[0_8px_20px_-14px_rgba(0,0,0,0.15)] ring-1 ring-black/5"
+                }`}
+              >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left text-[15px] font-semibold text-black"
+                  className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
                 >
-                  {item.q}
-                  <ChevronUp
-                    size={18}
-                    className={`shrink-0 transition-transform duration-300 ${isOpen ? "rotate-0" : "rotate-180"}`}
-                  />
+                  <span
+                    className={`text-[15px] font-semibold transition-colors ${
+                      isOpen ? "text-black" : "text-black/85"
+                    }`}
+                  >
+                    {item.q}
+                  </span>
+                  <span
+                    className={`grid h-8 w-8 shrink-0 place-items-center rounded-full transition-all duration-300 ${
+                      isOpen ? "bg-yellow text-black" : "bg-black text-yellow"
+                    }`}
+                  >
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-300 ${
+                        isOpen ? "rotate-180" : "rotate-0"
+                      }`}
+                    />
+                  </span>
                 </button>
                 <div
                   className={`grid transition-all duration-300 ease-in-out ${
@@ -57,7 +85,11 @@ export function FAQ() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="px-6 pb-5 text-sm leading-relaxed text-ink-muted">{item.a}</p>
+                    <div className="border-t border-black/5 px-6 pb-5 pt-4">
+                      <p className="text-sm leading-relaxed text-ink-muted">
+                        {item.a}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

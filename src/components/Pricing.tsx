@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Star } from "lucide-react";
 
 const plans = [
   {
@@ -44,34 +44,50 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section id="blogs" className="bg-cream py-24">
-      <div className="container-px mx-auto max-w-[1100px]">
-        <div className="rounded-[2rem] bg-blush-100 p-8 shadow-[0_20px_60px_-30px_rgba(26,23,16,0.3)] sm:p-12">
+    <section id="pricing" className="bg-black py-8 md:py-20">
+      <div className="container-px mx-auto max-w-7xl">
+        <div className="rounded-[2rem] shadow-[0_30px_70px_-30px_rgba(0,0,0,0.6)]">
           <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-black sm:text-4xl">
-              Training That <span className="text-yellow-dark">Fits Your Dog</span>
+            <p className="inline-flex items-center gap-2 rounded-full bg-yellow px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-black">
+              Pricing Plans
+            </p>
+            <h2 className="mt-5 text-3xl font-extrabold text-white sm:text-4xl">
+              Training That <span className="text-yellow">Fits Your Dog</span>
             </h2>
-            <p className="mt-3 text-[15px] text-ink-muted">Simple plans for every training need.</p>
+            <p className="mt-3 text-[15px] text-white/60">
+              Simple plans for every training need.
+            </p>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-3 md:items-center">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`flex flex-col rounded-3xl p-7 ${
+                className={`relative flex flex-col rounded-3xl p-7 transition-all duration-300 ${
                   plan.highlight
-                    ? "bg-yellow text-black shadow-[0_20px_40px_-16px_rgba(255,181,0,0.6)]"
-                    : "bg-white text-black shadow-[0_16px_36px_-20px_rgba(26,23,16,0.2)]"
+                    ? "bg-yellow text-black shadow-[0_25px_50px_-16px_rgba(255,181,0,0.45)] md:-translate-y-3 md:scale-[1.05] md:p-8"
+                    : "bg-white/10 text-white ring-1 ring-white/10 hover:bg-white/[0.06]"
                 }`}
               >
+                {plan.highlight && (
+                  <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-black px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-yellow">
+                    <Star size={11} fill="currentColor" strokeWidth={0} />
+                    Most Popular
+                  </span>
+                )}
+
                 <p
                   className={`text-xs font-semibold uppercase tracking-wide ${
-                    plan.highlight ? "text-black/60" : "text-ink-muted"
+                    plan.highlight ? "text-black/60" : "text-white/45"
                   }`}
                 >
                   {plan.eyebrow}
                 </p>
-                <h3 className={`mt-1 text-xl font-extrabold ${plan.highlight ? "text-black" : "text-yellow-dark"}`}>
+                <h3
+                  className={`mt-1.5 text-xl font-extrabold ${
+                    plan.highlight ? "text-black" : "text-white"
+                  }`}
+                >
                   {plan.name}
                 </h3>
                 <p className="mt-3 text-3xl font-extrabold">{plan.price}</p>
@@ -79,7 +95,17 @@ export function Pricing() {
                 <ul className="mt-6 flex flex-1 flex-col gap-2.5">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check size={16} className={plan.highlight ? "text-black" : "text-yellow-dark"} strokeWidth={3} />
+                      <span
+                        className={`grid h-4 w-4 shrink-0 place-items-center rounded-full ${
+                          plan.highlight ? "bg-black" : "bg-yellow"
+                        }`}
+                      >
+                        <Check
+                          size={11}
+                          className={plan.highlight ? "text-yellow" : "text-black"}
+                          strokeWidth={3.5}
+                        />
+                      </span>
                       {feature}
                     </li>
                   ))}
@@ -87,8 +113,10 @@ export function Pricing() {
 
                 <a
                   href="#contact"
-                  className={`mt-7 rounded-full px-6 py-3 text-center text-sm font-semibold transition-transform hover:-translate-y-0.5 ${
-                    plan.highlight ? "bg-white text-black" : "bg-yellow text-black"
+                  className={`mt-7 rounded-full px-6 py-3 text-center text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 ${
+                    plan.highlight
+                      ? "bg-black text-yellow shadow-[0_10px_24px_-8px_rgba(0,0,0,0.5)]"
+                      : "bg-yellow text-black"
                   }`}
                 >
                   Book Now
