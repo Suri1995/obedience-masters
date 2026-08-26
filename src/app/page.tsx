@@ -10,6 +10,7 @@ import { Testimonials } from "@/components/Testimonials";
 import { MeetExpert } from "@/components/MeetExpert";
 import { Pricing } from "@/components/Pricing";
 import { FAQ } from "@/components/FAQ";
+import { ComponentGallery } from "@/components/ComponentGallery";
 import { CTAForm } from "@/components/CTAForm";
 import { Footer } from "@/components/Footer";
 
@@ -28,6 +29,7 @@ export default function Home() {
         <Testimonials />
         <MeetExpert />
         <Pricing />
+        <ComponentGallery />
         <FAQ />
         <CTAForm />
       </main>
