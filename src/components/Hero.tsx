@@ -38,9 +38,9 @@ export function Hero() {
           />
         </div>
         {/* Mobile: full dark wash so text stays legible over the whole photo */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/55 lg:hidden" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-black/45 to-black/35 lg:hidden" />
         {/* Desktop: photo stays crisp on the right, fades to solid black on the left for the text column */}
-        <div className="absolute inset-0 hidden bg-gradient-to-r from-black via-black/85 to-black/10 lg:block" />
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-black/75 via-black/50 to-white/15 lg:block" />
       </div>
 
       {/* Subtle brand glow, echoes the yellow arc in the logo without competing with the photo */}
@@ -50,7 +50,7 @@ export function Hero() {
         <div className="max-w-xl">
           <p className="inline-flex items-center gap-2 rounded-full bg-yellow px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-black">
             <span aria-hidden className="text-sm">🐾</span>
-            Trusted Dog Training Studio
+            Trusted Dog Training Experts
           </p>
 
           <h1 className="font-display mt-6 text-[2.5rem] font-extrabold leading-[1.1] tracking-tight text-white sm:text-6xl">
@@ -58,10 +58,8 @@ export function Hero() {
             <span className="text-yellow">&ldquo;That&rsquo;s My Dog!&rdquo;</span>
           </h1>
 
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-white/70">
-            Make training a happy experience for your dog. Build positive
-            habits, grow their confidence, and strengthen your bond with
-            guidance from trusted professionals.
+          <p className="mt-6 text-lg leading-relaxed text-white/70">
+            Expert-led training that transforms untruly habits into lasting obedience. Build confidence, trust, and a stronger connection with your dog guided by professionals who know what works.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">

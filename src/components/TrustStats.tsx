@@ -4,22 +4,22 @@ const stats = [
   {
     icon: Star,
     value: "4.9/5",
-    label: "200+ Happy Reviews",
+    label: "1500+ Happy Reviews",
   },
   {
     icon: PawPrint,
-    value: "1,500+",
+    value: "2000+",
     label: "Dogs Trained",
   },
   {
     icon: ShieldCheck,
-    value: "8+ Years",
+    value: "17+ Years",
     label: "Training Experience",
   },
   {
     icon: BadgeCheck,
     value: "Certified",
-    label: "Professional Trainers",
+    label: "Professional Trainer",
   },
 ];
 
