@@ -6,8 +6,10 @@ import Image from "next/image";
 
 const links = [
   { label: "Home", href: "#home" },
+  { label: "About", href: "#story" },
+  { label: "Training courses", href: "#services" },
   { label: "Services", href: "#services" },
-  { label: "Our Story", href: "#story" },
+  { label: "Trainers", href: "#trainers" },
   { label: "Blogs", href: "#blogs" },
 ];
 
@@ -55,10 +57,10 @@ export function Navbar() {
         </ul>
 
         <a
-          href="#contact"
+          href="tel:+919700030338"
           className="hidden items-center gap-2 rounded-full bg-black px-6 py-2.5 text-[14px] font-semibold uppercase tracking-[0.08em] text-yellow shadow-[0_8px_20px_-6px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-6px_rgba(0,0,0,0.6)] lg:inline-flex"
         >
-          Reach Us
+          Call: 97000 30338
           <span className="h-1.5 w-1.5 rounded-full bg-yellow" />
         </a>
 
@@ -108,11 +110,11 @@ export function Navbar() {
           </ul>
           <div className="px-5 pb-6 pt-2">
             <a
-              href="#contact"
+              href="tel:+919700030338"
               onClick={() => setOpen(false)}
               className="block rounded-full bg-yellow px-6 py-3 text-center text-[14px] font-semibold uppercase tracking-[0.08em] text-black"
             >
-              Reach Us
+              Call: 97000 30338
             </a>
           </div>
         </div>

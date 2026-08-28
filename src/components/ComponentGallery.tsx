@@ -30,7 +30,7 @@ const galleryItems = [
 
 export function ComponentGallery() {
   return (
-    <section id="gallery" className="bg-cream py-24">
+    <section id="blogs" className="bg-cream py-24">
       <div className="container-px mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
