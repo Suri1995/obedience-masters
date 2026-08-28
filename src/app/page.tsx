@@ -28,7 +28,7 @@ export default function Home() {
         <BeforeAfter />
         <Testimonials />
         <MeetExpert />
-        <Pricing />
+        {/* <Pricing /> */}
         <ComponentGallery />
         <FAQ />
         <CTAForm />
