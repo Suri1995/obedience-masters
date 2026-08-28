@@ -22,9 +22,9 @@ export default function Home() {
         <Hero />
         <TrustStats />
         <BehaviorChallenges />
+        <ProcessSteps />
         <Services />
         <WhyChooseUs />
-        <ProcessSteps />
         <BeforeAfter />
         <Testimonials />
         <MeetExpert />

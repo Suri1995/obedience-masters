@@ -3,9 +3,9 @@ import { ArrowRight } from "lucide-react";
 import { WaveDivider } from "./WaveDivider";
 
 const stats = [
-  { value: "500+", label: "Dogs trained" },
-  { value: "10+ yrs", label: "In practice" },
-  { value: "100%", label: "Positive reinforcement" },
+  { value: "17+ yrs", label: "In practice" },
+  { value: "100%", label: "Professional Dog Trainer" },
+  { value: "2000+", label: "Dogs trained" },
 ];
 
 export function Hero() {
@@ -14,16 +14,29 @@ export function Hero() {
       id="home"
       className="relative isolate overflow-hidden bg-black"
     >
-      {/* Full-bleed photo */}
+      {/* Full-bleed photo — art-directed per breakpoint:
+          portrait crop below 640px, landscape crop from 640px up. */}
       <div className="absolute inset-0">
-        <Image
-          src="https://placedog.net/1600/900?id=59"
-          alt="Trainer walking a calm, well-trained golden retriever on a leash"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[70%_center]"
-        />
+        <div className="absolute inset-0 sm:hidden">
+          <Image
+            src="/trainer-husky-hero-portrait.png"
+            alt="Trainer kneeling beside a calm, well-trained husky on a leash"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[center_20%]"
+          />
+        </div>
+        <div className="absolute inset-0 hidden sm:block">
+          <Image
+            src="/trainer-husky-hero-landscape.png"
+            alt="Trainer kneeling beside a calm, well-trained husky on a leash"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[70%_center]"
+          />
+        </div>
         {/* Mobile: full dark wash so text stays legible over the whole photo */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/55 lg:hidden" />
         {/* Desktop: photo stays crisp on the right, fades to solid black on the left for the text column */}
@@ -56,15 +69,15 @@ export function Hero() {
               href="#contact"
               className="rounded-full bg-yellow px-7 py-3.5 text-[15px] font-semibold text-black shadow-[0_10px_24px_-6px_rgba(255,181,0,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-6px_rgba(255,181,0,0.6)]"
             >
-              Book Free Consultation
+              Schedule dog training
             </a>
-            <a
+            {/* <a
               href="#services"
               className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-black shadow-[0_10px_24px_-6px_rgba(0,0,0,0.3)] transition-all duration-300 hover:-translate-y-0.5"
             >
               Our Services
               <ArrowRight size={16} />
-            </a>
+            </a> */}
           </div>
 
           <dl className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-white/15 pt-7">
