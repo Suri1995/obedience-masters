@@ -24,7 +24,7 @@ const trainers = [
 
 export function MeetExpert() {
   return (
-    <section className="bg-cream py-24">
+    <section id="trainers" className="bg-cream py-24">
       <div className="container-px mx-auto max-w-7xl">
         <div className="text-center">
           <p className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-yellow">
