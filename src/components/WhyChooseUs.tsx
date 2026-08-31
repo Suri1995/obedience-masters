@@ -1,43 +1,40 @@
 import Image from "next/image";
-import { GraduationCap, Sparkles, Compass, Heart } from "lucide-react";
 
 export function WhyChooseUs() {
   return (
-    <section className="bg-cream py-24">
-      <div className="container-px mx-auto max-w-7xl">
-        <div className="text-center">
-          <p className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-yellow">
+    <section className="flex min-h-screen flex-col justify-center bg-cream py-12 sm:py-16">
+      <div className="container-px mx-auto w-full max-w-7xl">
+        {/* ---------- Header ---------- */}
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-1.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-yellow">
+            <span className="h-1.5 w-1.5 rounded-full bg-yellow" />
             Why Choose Us?
           </p>
-          <h2 className="mt-5 text-3xl font-extrabold text-black sm:text-4xl">
-            Because Every Dog Deserves the Right Approach.
+          <h2 className="mt-5 text-[28px] font-extrabold leading-[1.15] tracking-tight text-black sm:text-4xl lg:text-[42px]">
+            Because every dog deserves the right approach.
           </h2>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3 md:grid-rows-2">
-          <div className="rounded-3xl bg-white p-8 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-black">
-              <GraduationCap size={20} className="text-yellow" strokeWidth={2.25} />
-            </span>
-            <h3 className="mt-5 text-xl font-bold text-black">
+        {/* ---------- Bento grid, explicit heights so nothing stretches ---------- */}
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+          {/* Experienced Trainers */}
+          <div className="flex min-h-[240px] flex-col rounded-[1.75rem] bg-neutral-100 p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-7 lg:min-h-[270px]">
+            <h3 className="text-lg font-extrabold text-yellow-dark sm:text-xl">
               Experienced Trainers
             </h3>
-            <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">
+            <p className="mt-3 text-[14px] leading-relaxed text-black/70">
               Our experienced trainers understand that every dog learns
-              differently. We work with your dog&rsquo;s personality, behavior,
-              and needs to create meaningful progress.
+              differently. We work with your dog&rsquo;s personality,
+              behavior, and needs to create meaningful progress.
             </p>
-            <div className="mt-6 h-1 w-16 rounded-full bg-yellow" />
           </div>
 
-          <div className="rounded-3xl bg-yellow p-8 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.3)]">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-black">
-              <Sparkles size={20} className="text-yellow" strokeWidth={2.25} />
-            </span>
-            <h3 className="mt-5 text-xl font-bold text-black">
+          {/* Personalised Plans */}
+          <div className="flex min-h-[240px] flex-col rounded-[1.75rem] bg-yellow p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-7 lg:min-h-[270px]">
+            <h3 className="text-lg font-extrabold text-black sm:text-xl">
               Personalised Plans
             </h3>
-            <p className="mt-3 text-[15px] leading-relaxed text-black/70">
+            <p className="mt-3 text-[14px] leading-relaxed text-black/70">
               Every dog has their own personality, habits, and quirks. Our
               personalised training plans focus on their age, behavior,
               lifestyle, and goals — with positive training for happier
@@ -45,53 +42,48 @@ export function WhyChooseUs() {
             </p>
           </div>
 
-          <div className="flex flex-col overflow-hidden rounded-3xl bg-white shadow-[0_16px_40px_-20px_rgba(0,0,0,0.18)] ring-1 ring-black/5 md:row-span-2">
-            <div className="p-8 pb-4">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-black">
-                <Compass size={20} className="text-yellow" strokeWidth={2.25} />
-              </span>
-              <h3 className="mt-5 text-xl font-bold text-black">
+          {/* Practical Guidance — tall card, image flush to the bottom */}
+          <div className="group flex flex-col overflow-hidden rounded-[1.75rem] bg-neutral-100 transition-transform duration-300 hover:-translate-y-1 sm:row-span-2 lg:min-h-[306px]">
+            <div className="p-6 sm:p-7">
+              <h3 className="text-lg font-extrabold text-yellow-dark sm:text-xl">
                 Practical Guidance
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">
+              <p className="mt-3 text-[14px] leading-relaxed text-black/70">
                 Training shouldn&rsquo;t stop when the session ends. We give
                 you practical guidance you can use at home, on walks, around
                 guests, and in everyday situations.
               </p>
             </div>
-            <div className="relative mt-auto h-56 w-full">
+            <div className="relative mt-auto min-h-[220px] w-full flex-1">
               <Image
-                src="https://placedog.net/500/500?id=104"
-                alt="Puppy looking attentively, mid-training"
+                src="/practical-guidance.png"
+                alt="Golden retriever puppy sitting attentively"
                 fill
-                sizes="(min-width: 768px) 380px, 90vw"
-                className="object-cover"
+                sizes="(min-width: 1024px) 340px, 90vw"
+                className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
           </div>
 
-          <div className="flex items-center gap-6 overflow-hidden rounded-3xl bg-white p-8 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.18)] ring-1 ring-black/5 md:col-span-2">
-            <div className="flex-1">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-black">
-                <Heart size={20} className="text-yellow" strokeWidth={2.25} />
-              </span>
-              <h3 className="mt-5 text-xl font-bold text-black">
+          {/* Positive Training — wide card, image flush on the right */}
+          <div className="group flex min-h-[240px] flex-col overflow-hidden rounded-[1.75rem] bg-neutral-100 transition-transform duration-300 hover:-translate-y-1 sm:col-span-2 sm:flex-row lg:min-h-[276px]">
+            <div className="flex flex-1 flex-col justify-center p-6 sm:p-7">
+              <h3 className="text-lg font-extrabold text-yellow-dark sm:text-xl">
                 Positive Training
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">
+              <p className="mt-3 text-[14px] leading-relaxed text-black/70">
                 We use positive, reward-based methods that encourage good
                 behavior, build confidence, and strengthen the bond between
                 you and your dog.
               </p>
             </div>
-            <div className="relative hidden h-32 w-40 shrink-0 overflow-hidden rounded-2xl sm:block">
+            <div className="relative h-52 w-full shrink-0 sm:h-auto sm:w-2/5">
               <Image
-                src="https://placedog.net/320/260?id=118"
-                alt="Dog lying calmly, well trained and relaxed"
+                src="/golden-retriever.png"
+                alt="Golden retriever lying down calmly, well trained"
                 fill
-                sizes="160px"
-                className="object-cover"
+                sizes="(min-width: 640px) 40vw, 90vw"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               />
             </div>
           </div>

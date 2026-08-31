@@ -87,6 +87,12 @@ export function BeforeAfter() {
 
   const showChip = dragging || hovering;
 
+  // Each label should only read as "on screen" when its side actually has
+  // room to show it. Fade it in/out over a small buffer zone near the
+  // edges instead of a hard cutoff, so it doesn't just pop.
+  const beforeLabelOpacity = Math.min(1, Math.max(0, (position - 8) / 10));
+  const afterLabelOpacity = Math.min(1, Math.max(0, (92 - position) / 10));
+
   return (
     <section className="relative overflow-hidden bg-cream py-8 md:py-20">
       {/* ambient wash */}
@@ -106,8 +112,8 @@ export function BeforeAfter() {
 
         <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-black sm:text-4xl md:text-[2.75rem]">
           See the{" "}
-          <span className="relative inline-block font-serif italic font-medium">
-            transformation
+          <span className="relative inline-block font-serif italic font-bold">
+            Transformation
             <svg
               aria-hidden
               viewBox="0 0 220 14"
@@ -165,10 +171,14 @@ export function BeforeAfter() {
                 className="object-cover object-top"
               />
 
-              {/* BEFORE (clipped overlay, desaturated for contrast even if source isn't pure b/w) */}
+              {/* BEFORE (clipped overlay, desaturated for contrast even if source isn't pure b/w).
+                  Visible region must run from the left edge up to `position`%, so the right-side
+                  inset is the *remaining* distance to 100 — not `position` itself. Using
+                  `position` directly here made the divider line (drawn at `left: position%`)
+                  disagree with where the image actually split, so dragging felt inverted. */}
               <div
                 className="absolute inset-0"
-                style={{ clipPath: `inset(0 ${position}% 0 0)` }}
+                style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
               >
                 <Image
                   src={BEFORE_IMAGE}
@@ -202,7 +212,10 @@ export function BeforeAfter() {
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-20 bg-gradient-to-t from-black/35 to-transparent" />
 
               {/* Labels */}
-              <div className="pointer-events-none absolute left-4 top-4 z-[7] flex flex-col gap-1">
+              <div
+                className="pointer-events-none absolute left-4 top-4 z-[7] flex flex-col gap-1 transition-opacity duration-150 ease-out"
+                style={{ opacity: beforeLabelOpacity }}
+              >
                 <span className="w-fit rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white backdrop-blur-md">
                   Before
                 </span>
@@ -210,7 +223,10 @@ export function BeforeAfter() {
                   Restless &amp; reactive
                 </span>
               </div>
-              <div className="pointer-events-none absolute right-4 top-4 z-[7] flex flex-col items-end gap-1">
+              <div
+                className="pointer-events-none absolute right-4 top-4 z-[7] flex flex-col items-end gap-1 transition-opacity duration-150 ease-out"
+                style={{ opacity: afterLabelOpacity }}
+              >
                 <span className="w-fit rounded-full bg-yellow px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-black shadow-sm">
                   After
                 </span>

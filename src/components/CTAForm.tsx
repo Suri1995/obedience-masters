@@ -38,16 +38,17 @@ export function CTAForm() {
   }
 
   return (
-    <section id="contact" className="bg-gray-500 py-8 md:py-20">
+    <section id="contact" className="bg-gray-300 py-8 md:py-20">
       <div className="container-px mx-auto max-w-7xl">
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="flex flex-col justify-center rounded-[2rem] bg-black p-8 sm:p-12">
+          <div className="flex flex-col justify-center rounded-[2rem] bg-black p-8">
             <span className="inline-flex w-fit items-center gap-2 rounded-full bg-yellow px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-black">
+              <span className="h-1.5 w-1.5 rounded-full bg-black" />
               Get Started
             </span>
             <h2 className="mt-5 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
               Your Dog Is Ready.{" "}
-              <span className="text-yellow">Are You?</span> 🐶
+              <span className="text-yellow">Are You?</span>
             </h2>
             <p className="mt-4 text-[15px] text-white/60">
               Let&rsquo;s turn everyday challenges into happy moments, one
@@ -64,10 +65,10 @@ export function CTAForm() {
               </p>
             </div>
 
-            <div className="relative mt-8 aspect-[16/10] w-full overflow-hidden rounded-[1.5rem] ring-1 ring-white/10">
+            <div className="relative mt-8 aspect-[16/10] w-full overflow-hidden">
               <Image
-                src="https://placedog.net/900/560?id=95"
-                alt="Content, well-trained family dog relaxing at home"
+                src="/cta-image.png"
+                alt="Content, well-trained Golden Retriever relaxing"
                 fill
                 sizes="(min-width: 1024px) 560px, 90vw"
                 className="object-cover"
@@ -75,7 +76,7 @@ export function CTAForm() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] bg-white p-8 shadow-[0_25px_60px_-30px_rgba(0,0,0,0.3)] ring-1 ring-black/5 sm:p-10">
+          <div className="rounded-[2rem] bg-white p-8 shadow-[0_25px_60px_-30px_rgba(0,0,0,0.3)] ring-1 ring-black/5">
             <h3 className="text-xl font-bold text-black">Your Pet Details</h3>
             <p className="mt-1 text-sm text-ink-muted">
               Tell us a bit about your dog and we&rsquo;ll follow up to
@@ -113,24 +114,6 @@ export function CTAForm() {
                   </select>
                 </div>
               </div>
-
-              <label className="mt-1 flex items-start gap-2.5 text-sm text-ink-muted">
-                <input
-                  type="checkbox"
-                  checked={accepted}
-                  onChange={(e) => setAccepted(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 shrink-0 accent-black"
-                />
-                <span>
-                  I accept the terms{" "}
-                  <a
-                    href="#"
-                    className="font-medium text-black underline decoration-yellow decoration-2 underline-offset-2 hover:text-yellow-dark"
-                  >
-                    Read our T&amp;Cs
-                  </a>
-                </span>
-              </label>
 
               <button
                 type="submit"

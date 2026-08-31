@@ -155,7 +155,7 @@ export function BehaviorChallenges() {
               But Struggling With Their Behavior?
             </span>
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-ink-muted/80">
+          <p className="mx-auto mt-4 text-[15px] leading-relaxed text-ink-muted/80">
             From barking to anxiety, the right training builds a calmer,
             happier dog — every card below fades from struggle to color, just
             like the dogs we work with.
@@ -214,24 +214,6 @@ export function BehaviorChallenges() {
                   <p className="mt-2 max-h-0 overflow-hidden text-sm leading-relaxed text-white/75 opacity-0 transition-all duration-500 ease-out group-hover:mt-2 group-hover:max-h-24 group-hover:opacity-100">
                     {item.blurb}
                   </p>
-                  <div className="mt-3 flex translate-y-2 items-center gap-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <span className="text-xs font-medium text-yellow">
-                      Learn more
-                    </span>
-                    <svg
-                      className="h-3 w-3 text-yellow"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
                 </div>
               </div>
             ))}
@@ -273,7 +255,7 @@ export function BehaviorChallenges() {
               className={`group relative grid size-12 place-items-center rounded-full transition-all duration-300 ${
                 !canScrollLeft
                   ? "cursor-not-allowed bg-white/50 text-black/20 shadow-none"
-                  : "bg-white text-black shadow-[0_8px_24px_-12px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:scale-105 hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.5)] active:scale-95"
+                  : "bg-yellow text-black shadow-[0_8px_24px_-12px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:scale-105 hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.5)] active:scale-95"
               }`}
             >
               <ChevronLeft
@@ -304,12 +286,6 @@ export function BehaviorChallenges() {
               )}
             </button>
           </div>
-        </div>
-
-        <div className="mt-6 text-center">
-          <p className="animate-pulse text-xs text-ink-muted/50">
-            ← Drag to scroll or use arrows →
-          </p>
         </div>
       </div>
     </section>

@@ -1,105 +1,131 @@
 import Image from "next/image";
-import { PawPrint, Target, Award, ArrowRight } from "lucide-react";
+import { Award, PawPrint, ArrowRight, Quote } from "lucide-react";
 
-const trainers = [
-  {
-    name: "Meera Nair",
-    role: "Founder & Lead Trainer",
-    icon: PawPrint,
-    photo: 65,
-    years: "8+ yrs experience",
-    trained: "900+ dogs trained",
-    bio: "Meera founded Obedience Masters after a decade working with rescue shelters, and specialises in puppy foundations and everyday obedience — building calm, confident dogs through positive reinforcement.",
-  },
-  {
-    name: "Arjun Verma",
-    role: "Behaviour Specialist",
-    icon: Target,
-    photo: 12,
-    years: "5+ yrs experience",
-    trained: "600+ dogs trained",
-    bio: "Arjun focuses on the harder cases — reactivity, anxiety, and leash aggression — working one-on-one with families to turn stressful walks and greetings into manageable, teachable moments.",
-  },
-];
+const trainer = {
+  name: "M. Solomon Brainord",
+  role: "Founder & Lead Trainer",
+  photo: "/trainer.png",
+  years: "17+",
+  yearsLabel: "Years of experience",
+  trained: "2000+",
+  trainedLabel: "Dogs trained",
+  bio: "Solomon founded Obedience Masters and has spent over 17 years turning unruly, anxious, and reactive dogs into calm, confident companions. From a puppy's first \"sit\" to the hardest behavioural cases, his approach is built on patience, positive reinforcement, and a genuine read on what each dog needs.",
+  pullQuote: "Every dog is trainable — you just have to speak their language.",
+};
 
 export function MeetExpert() {
   return (
-    <section id="trainers" className="bg-cream py-24">
-      <div className="container-px mx-auto max-w-7xl">
-        <div className="text-center">
-          <p className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-yellow">
-            Meet The Team
+    <section id="trainers" className="relative overflow-hidden bg-cream py-16 sm:py-24">
+      {/* ambient accent */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-yellow/10 blur-3xl"
+      />
+
+      <div className="container-px relative mx-auto max-w-7xl">
+        {/* ---------- Header ---------- */}
+        <div className="mx-auto text-center">
+          <p className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-1.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-yellow">
+            <span className="h-1.5 w-1.5 rounded-full bg-yellow" />
+            Meet the Trainer
           </p>
-          <h2 className="mt-5 text-3xl font-extrabold leading-tight text-black sm:text-4xl">
-            The Experts Behind{" "}
-            <span className="text-yellow-dark">Your Dog&rsquo;s Transformation.</span>
+          <h2 className="mt-5 text-[32px] font-extrabold leading-[1.1] tracking-tight text-black sm:text-4xl lg:text-[42px]">
+            The expert behind{" "}
+            <span className="text-yellow-dark">your dog&rsquo;s transformation.</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-ink-muted">
-            Two trainers, two specialities — together they cover everything
-            from a puppy&rsquo;s first &ldquo;sit&rdquo; to the hardest
-            behavioural cases.
+          <p className="mx-auto mt-4 text-[15px] leading-relaxed text-ink-muted">
+            17+ years of hands-on experience, covering everything from a
+            puppy&rsquo;s first &ldquo;sit&rdquo; to the hardest behavioural
+            cases.
           </p>
         </div>
 
-        <div className="mt-14 grid gap-8 sm:grid-cols-2">
-          {trainers.map((trainer) => {
-            const Icon = trainer.icon;
-            return (
-              <div
-                key={trainer.name}
-                className="group overflow-hidden rounded-3xl bg-white shadow-[0_20px_50px_-24px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_30px_60px_-24px_rgba(0,0,0,0.35)]"
-              >
-                <div className="relative aspect-[5/4] overflow-hidden">
-                  <Image
-                    src={`https://i.pravatar.cc/600?img=${trainer.photo}`}
-                    alt={trainer.name}
-                    fill
-                    sizes="(min-width: 640px) 460px, 90vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent" />
-                  <span className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-black px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-yellow">
-                    <Icon size={13} />
-                    {trainer.role}
+        {/* ---------- Profile card ---------- */}
+        <div className="mx-auto mt-14 max-w-5xl">
+          <div className="overflow-hidden rounded-[2rem] bg-white shadow-[0_35px_70px_-30px_rgba(0,0,0,0.3)] ring-1 ring-black/5 sm:grid sm:grid-cols-[0.9fr_1.1fr]">
+            {/* Photo */}
+            <div className="relative aspect-[4/5] sm:aspect-auto">
+              <Image
+                src={trainer.photo}
+                alt={trainer.name}
+                fill
+                sizes="(min-width: 640px) 440px, 100vw"
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:via-transparent sm:to-black/5" />
+
+              <span className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-black/80 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-yellow backdrop-blur-sm">
+                <PawPrint size={13} />
+                {trainer.role}
+              </span>
+
+              <h3 className="absolute bottom-6 left-5 right-5 text-2xl font-extrabold leading-tight text-white sm:hidden">
+                {trainer.name}
+              </h3>
+            </div>
+
+            {/* Content */}
+            <div className="flex flex-col justify-center p-7 sm:p-11">
+              <h3 className="hidden text-[26px] font-extrabold leading-tight text-black sm:block">
+                {trainer.name}
+              </h3>
+
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-muted sm:mt-4">
+                {trainer.bio}
+              </p>
+
+              {/* Pull quote */}
+              <div className="mt-6 flex gap-3 border-l-2 border-yellow pl-4">
+                <Quote
+                  size={16}
+                  className="mt-0.5 shrink-0 text-yellow-dark"
+                  fill="currentColor"
+                  strokeWidth={0}
+                />
+                <p className="text-[14.5px] font-medium italic leading-relaxed text-black/70">
+                  {trainer.pullQuote}
+                </p>
+              </div>
+
+              {/* Stat blocks */}
+              <div className="mt-7 grid grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-cream p-4 ring-1 ring-black/5">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-black">
+                    <Award size={16} className="text-yellow" strokeWidth={2.25} />
                   </span>
-                  <h3 className="absolute bottom-5 left-5 text-2xl font-extrabold text-white">
-                    {trainer.name}
-                  </h3>
-                </div>
-
-                <div className="p-7">
-                  <p className="text-[15px] leading-relaxed text-ink-muted">
-                    {trainer.bio}
+                  <p className="mt-3 text-2xl font-extrabold leading-none text-black">
+                    {trainer.years}
                   </p>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-cream px-3 py-1.5 text-xs font-semibold text-black">
-                      <Award size={13} className="text-yellow-dark" />
-                      {trainer.years}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-cream px-3 py-1.5 text-xs font-semibold text-black">
-                      <PawPrint size={13} className="text-yellow-dark" />
-                      {trainer.trained}
-                    </span>
-                  </div>
-
-                  <a
-                    href="#contact"
-                    className="group/link mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-black"
-                  >
-                    <span className="relative">
-                      Connect with {trainer.name.split(" ")[0]}
-                      <span className="absolute inset-x-0 -bottom-0.5 h-[2px] origin-left scale-x-0 bg-yellow transition-transform duration-300 ease-out group-hover/link:scale-x-100" />
-                    </span>
-                    <ArrowRight
-                      size={16}
-                      className="transition-transform duration-300 group-hover/link:translate-x-1"
-                    />
-                  </a>
+                  <p className="mt-1 text-[12.5px] font-medium text-ink-muted">
+                    {trainer.yearsLabel}
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-cream p-4 ring-1 ring-black/5">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-black">
+                    <PawPrint size={16} className="text-yellow" strokeWidth={2.25} />
+                  </span>
+                  <p className="mt-3 text-2xl font-extrabold leading-none text-black">
+                    {trainer.trained}
+                  </p>
+                  <p className="mt-1 text-[12.5px] font-medium text-ink-muted">
+                    {trainer.trainedLabel}
+                  </p>
                 </div>
               </div>
-            );
-          })}
+
+              <a
+                href="#contact"
+                className="group/link mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-yellow shadow-[0_12px_24px_-10px_rgba(0,0,0,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-10px_rgba(0,0,0,0.5)]"
+              >
+                Connect with {trainer.name.split(" ")[0]}
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover/link:translate-x-1"
+                />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>

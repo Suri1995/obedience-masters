@@ -23,7 +23,7 @@ export function Hero() {
             alt="Trainer kneeling beside a calm, well-trained husky on a leash"
             fill
             priority
-            sizes="100vw"
+            sizes="calc(100vw - 17px)"
             className="object-cover object-[center_20%]"
           />
         </div>
@@ -33,7 +33,7 @@ export function Hero() {
             alt="Trainer kneeling beside a calm, well-trained husky on a leash"
             fill
             priority
-            sizes="100vw"
+            sizes="calc(100vw - 17px)"
             className="object-cover object-[70%_center]"
           />
         </div>
