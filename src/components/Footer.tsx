@@ -1,4 +1,4 @@
-import { Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { WaveDivider } from "./WaveDivider";
 import { Logo } from "./Logo";
 
@@ -75,13 +75,19 @@ export function Footer() {
           </nav>
         </div>
 
-        <div>
+                <div>
           <p className="text-sm font-bold text-black">Contact Us</p>
           <a
             href="tel:+919700030338"
             className="mt-3 flex items-center gap-2 text-[15px] font-medium text-black/80 hover:text-black"
           >
             <Phone size={16} /> 97000 30338
+          </a>
+          <a
+            href="mailto:msolomonmoony@gmail.com"
+            className="mt-2 flex items-center gap-2 text-[15px] font-medium text-black/80 hover:text-black"
+          >
+            <Mail size={16} /> msolomonmoony@gmail.com
           </a>
         </div>
 

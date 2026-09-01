@@ -50,7 +50,7 @@ export default function RootLayout({
       <body className="antialiased">
         {children}
         <WhatsAppButton
-          phoneNumber="911234567890"
+          phoneNumber="+919700030338"
           message="Hi Obedience Masters! I'd like to know more about your dog training programs."
         />
       </body>
