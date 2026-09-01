@@ -46,17 +46,17 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative mt-4 bg-yellow-light pb-10 pt-16">
+    <footer className="relative mt-4 bg-yellow-soft pb-10 pt-16">
       <WaveDivider color="var(--color-cream)" position="top" />
 
       <div className="container-px mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2 lg:col-span-1">
           <img
-            src="/logo.webp"
+            src="/footer-logo.png"
             alt="Obedience Masters Logo"
-            width={220}
-            height={73}
-            className="h-auto w-[260px] object-contain"
+            width={75}
+            height={75}
+            className="h-auto w-[170px] object-contain"
           />
         </div>
 

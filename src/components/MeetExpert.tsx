@@ -97,9 +97,9 @@ export function MeetExpert() {
               <button
                 type="button"
                 onClick={() => setBioOpen(true)}
-                className="mt-1.5 w-fit text-[13.5px] font-semibold text-black underline decoration-yellow decoration-2 underline-offset-2 hover:text-yellow-dark"
+                className="mt-1.5 w-fit text-[13.5px] font-semibold text-black underline hover:decoration-yellow decoration-2 underline-offset-2 hover:text-yellow-dark"
               >
-                ... Read more
+                Read more
               </button>
 
               {/* Pull quote */}
@@ -117,27 +117,31 @@ export function MeetExpert() {
 
               {/* Stat blocks */}
               <div className="mt-7 grid grid-cols-2 gap-4">
-                <div className="rounded-2xl bg-cream p-4 ring-1 ring-black/5">
+                <div className="flex gap-3 rounded-2xl bg-cream p-4 ring-1 ring-black/5">
                   <span className="grid h-9 w-9 place-items-center rounded-full bg-black">
                     <Award size={16} className="text-yellow" strokeWidth={2.25} />
                   </span>
-                  <p className="mt-3 text-2xl font-extrabold leading-none text-black">
+                  <div>
+                  <p className="text-2xl font-extrabold leading-none text-black">
                     {trainer.years}
                   </p>
                   <p className="mt-1 text-[12.5px] font-medium text-ink-muted">
                     {trainer.yearsLabel}
                   </p>
+                  </div>
                 </div>
-                <div className="rounded-2xl bg-cream p-4 ring-1 ring-black/5">
+                <div className="flex gap-3 rounded-2xl bg-cream p-4 ring-1 ring-black/5">
                   <span className="grid h-9 w-9 place-items-center rounded-full bg-black">
                     <PawPrint size={16} className="text-yellow" strokeWidth={2.25} />
                   </span>
-                  <p className="mt-3 text-2xl font-extrabold leading-none text-black">
+                  <div>
+                  <p className="text-2xl font-extrabold leading-none text-black">
                     {trainer.trained}
                   </p>
                   <p className="mt-1 text-[12.5px] font-medium text-ink-muted">
                     {trainer.trainedLabel}
                   </p>
+                  </div>
                 </div>
               </div>
 
