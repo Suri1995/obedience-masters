@@ -292,7 +292,7 @@ export function ComponentGallery() {
               <ChevronLeft size={18} />
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               {Array.from({ length: maxIndex + 1 }).map((_, i) => (
                 <button
                   key={i}
