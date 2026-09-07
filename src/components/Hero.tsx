@@ -36,7 +36,6 @@ function PremiumProblemSelect({
   const buttonRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
 
-  // Portals need the DOM, so only render one after mount (SSR-safe).
   useEffect(() => setMounted(true), [])
 
   function updateCoords() {
@@ -45,17 +44,11 @@ function PremiumProblemSelect({
     setCoords({ top: rect.bottom + 8, left: rect.left, width: rect.width })
   }
 
-  // Computed BEFORE the panel opens (not in an effect after it renders),
-  // so React batches the coords + open state into one paint and the panel
-  // never flashes at {0,0} before jumping into place.
   function toggleOpen() {
     if (!open) updateCoords()
     setOpen((prev) => !prev)
   }
 
-  // Once open, keep it glued to the trigger on scroll (capture:true also
-  // catches the card's internal overflow-y-auto scroll, not just the
-  // window) or resize.
   useEffect(() => {
     if (!open) return
     window.addEventListener("scroll", updateCoords, true)
@@ -127,7 +120,6 @@ function PremiumProblemSelect({
 
   return (
     <div ref={containerRef} className="relative">
-      {/* Keeps FormData.get("problem") working exactly as before */}
       <input type="hidden" name={name} value={value} />
 
       <button
@@ -149,8 +141,6 @@ function PremiumProblemSelect({
         />
       </button>
 
-      {/* Rendered into document.body so the card's overflow-y-auto and
-          rounded corners can never clip the open panel. */}
       {mounted ? createPortal(panel, document.body) : null}
     </div>
   )
@@ -167,7 +157,6 @@ function HeroAppointmentForm() {
     const problem = values.get("problem")
 
     try {
-      // TODO: point this at your real endpoint / payload shape.
       const response = await fetch("/api/appointment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -227,7 +216,6 @@ function HeroAppointmentForm() {
         className="w-full rounded-xl border border-black/10 bg-cream/40 px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/30"
       />
 
-      <div className="grid grid-cols-2 gap-3">
         <input
           name="breed"
           placeholder="Dog Breed"
@@ -238,9 +226,7 @@ function HeroAppointmentForm() {
           placeholder="Dog Age"
           className="w-full rounded-xl border border-black/10 bg-cream/40 px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/30"
         />
-      </div>
 
-      {/* ── Premium custom dropdown (was a native <select>) ── */}
       <PremiumProblemSelect name="problem" placeholder="Main Problem" options={PROBLEMS} />
 
       <textarea
@@ -269,7 +255,7 @@ function HeroAppointmentForm() {
 
 function AppointmentFormCard() {
   return (
-    <div className="flex h-full flex-col rounded-3xl border-t-4 border-yellow bg-white p-6 shadow-2xl shadow-black/20 sm:p-7">
+    <div className="flex h-full justify-center flex-col rounded-3xl border-t-4 border-yellow bg-white p-6 shadow-2xl shadow-black/20 lg:p-7">
       <p className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-yellow px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.06em] text-black">
         🐾 Book Appointment
       </p>
@@ -283,12 +269,7 @@ function AppointmentFormCard() {
 export function Hero() {
   return (
     <section id="home" role="region" aria-label="Obedience Masters — book a training session" className="relative w-full bg-amber-50">
-      {/*
-        ── Mobile (< 768px) ──
-        Container is locked to the photo's real 9:13 ratio, so the full
-        portrait always renders with ZERO cropping — no aspect guess that
-        can clip the trainer, dog, or the baked-in headline text.
-      */}
+      {/* ===================== MOBILE (< 768px) ===================== */}
       <div className="relative w-full md:hidden" style={{ aspectRatio: "9 / 13" }}>
         <Image
           src="/hero-916.png"
@@ -300,33 +281,14 @@ export function Hero() {
         />
       </div>
 
-      {/*
-        ═══ Book appointment form — mobile only ═══
-        A separate block below the image, pulled up with a negative margin
-        so it overlaps the clear grass at the bottom of the photo instead
-        of sitting in plain black space beneath it. Tune the -mt value to
-        how much clear ground your actual hero-916.png leaves below the text.
-      */}
       <div className="relative z-10 -mt-16 px-4 pb-10 sm:-mt-24 sm:px-6 md:hidden">
         <div className="mx-auto w-full max-w-md">
           <AppointmentFormCard />
         </div>
       </div>
 
-      {/*
-        ── Tablet/Desktop (>= 768px) ──
-        16 / 9 matches the photo's real ratio (was 16 / 7, which was far
-        wider/shorter than the source image — that forced object-cover to
-        crop a lot of vertical height at every desktop width, and with only
-        object-left set, that crop defaulted to vertical-center, chopping
-        the headline text and the dog's feet off the bottom).
-
-        object-[left_bottom]: on the rare width where cropping is still
-        needed (narrow end of the md/lg range), it now trims from the TOP
-        (empty sky/treeline) and keeps the bottom-left — trainer, dog, and
-        the baked-in headline — fully in frame.
-      */}
-      <div className="relative hidden w-full md:block" style={{ aspectRatio: "16 / 9" }}>
+      {/* ===================== DESKTOP (>= 768px) ===================== */}
+      <div className="relative hidden w-full md:block" style={{ height: "min(56.25vw, calc(100vh - 88px))" }}>
         <Image
           src="/hero-16-9.png"
           alt="Professional dog trainer with a well-trained husky in Hyderabad"
@@ -337,14 +299,23 @@ export function Hero() {
         />
 
         {/*
-          max-h-[90%] (was a forced h-[85%]): the card now only shrinks to
-          fit — and only scrolls internally via the overflow-y-auto on its
-          form wrapper — if it genuinely doesn't fit the available height.
-          At normal desktop viewport heights (800px+), with the container
-          now correctly sized to 16:9, the card renders at its natural
-          height with the Submit button fully visible, no scroll needed.
+          768–1023px (md, before lg/xl) is where vertical room is tightest —
+          56.25vw at these widths gives a fairly short hero, and the
+          6-field form doesn't naturally fit.
+
+          h-[90%] (a real height, not max-height) gives AppointmentFormCard's
+          `h-full` something definite to resolve against. That's what makes
+          the flex column bounded, so its `min-h-0 flex-1 overflow-y-auto`
+          region can correctly detect overflow and scroll internally —
+          the card itself never grows past 90% of the hero, and the
+          Submit button always stays visible at the bottom of the card
+          instead of being pushed out past the hero/section boundary.
+
+          xl:h-auto removes the cap once there's plenty of vertical room
+          (1280px+, matching how 1440px already looked correct) — card
+          renders at its natural height again, no scroll.
         */}
-        <div className="absolute right-8 top-1/2 z-10 max-h-[90%] w-[300px] max-w-md -translate-y-1/2 lg:right-16 lg:w-[370px] xl:w-[420px]">
+        <div className="absolute right-8 top-1/2 z-10 h-[90%] w-[300px] max-w-md -translate-y-1/2 lg:right-16 md:w-[250px] lg:h-[90%] lg:w-[300px] xl:h-auto xl:w-[420px]">
           <AppointmentFormCard />
         </div>
       </div>
