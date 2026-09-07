@@ -8,7 +8,7 @@ import "@fontsource/dm-sans/500.css";
 import "@fontsource/dm-sans/600.css";
 import "@fontsource/dm-sans/700.css";
 import "./globals.css";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import FloatingContactButtons from "@/components/FloatingWidgets";
 
 export const metadata: Metadata = {
   title: "Obedience Masters | Positive, Professional Dog Training",
@@ -49,10 +49,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         {children}
-        <WhatsAppButton
-          phoneNumber="+919700030338"
-          message="Hi Obedience Masters! I'd like to know more about your dog training programs."
-        />
+        <FloatingContactButtons />
       </body>
     </html>
   );

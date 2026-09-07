@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Award, PawPrint, ArrowRight, Quote, X } from "lucide-react";
 
 const trainer = {
-  name: "M. Solomon Brainord",
+  name: "M. Solomon",
   role: "Founder & Lead Trainer",
   photo: "/trainer.png",
   years: "17+",

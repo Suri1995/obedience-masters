@@ -3,20 +3,17 @@ import { ArrowRight } from "lucide-react";
 
 const services = [
   {
-    stage: "Stage 01",
     title: "Puppy Training",
     image: "/23.png",
     blurb: "Foundational socialisation, potty guidance, and early good habits.",
   },
   {
-    stage: "Stage 02",
     title: "Obedience Training",
     image: "/24.png",
     blurb:
       "Sit, stay, come and reliable everyday commands, built with positive reinforcement.",
   },
   {
-    stage: "Stage 03",
     title: "Behaviour Training",
     image: "/25.png",
     blurb: "Targeted correction for barking, leash pulling, and reactive behaviour.",
@@ -62,15 +59,6 @@ export function Services() {
                 {/* gradient for legibility */}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/10" />
 
-                {/* stage badge */}
-                <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/90 py-1.5 pl-1.5 pr-3.5 backdrop-blur-sm">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-yellow font-display text-[11px] font-extrabold text-black">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-yellow">
-                    {service.stage}
-                  </span>
-                </div>
 
                 {/* title overlaid at image bottom */}
                 <h3 className="absolute inset-x-5 bottom-5 text-2xl font-extrabold leading-tight text-white drop-shadow-sm">

@@ -4,7 +4,7 @@ const stats = [
   {
     icon: Star,
     value: "4.9/5",
-    label: "1500+ Happy Reviews",
+    label: "500+ Happy Reviews",
   },
   {
     icon: PawPrint,

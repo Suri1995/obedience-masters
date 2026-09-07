@@ -1,116 +1,353 @@
-import Image from "next/image";
-import { ArrowRight } from "lucide-react";
-import { WaveDivider } from "./WaveDivider";
+"use client"
 
-const stats = [
-  { value: "17+ yrs", label: "In practice" },
-  { value: "100%", label: "Professional Dog Trainer" },
-  { value: "2000+", label: "Dogs trained" },
-];
+import Image from "next/image"
+import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
+import { Check, CheckCircle2, ChevronDown } from "lucide-react"
+
+// TODO: swap in your real problem list if this differs.
+const PROBLEMS = [
+  "Puppy Training",
+  "Obedience Training",
+  "Behavior Correction",
+  "Aggression Management",
+  "Leash & Walking Training",
+]
+
+/**
+ * Premium custom dropdown used for the "Main Problem" field.
+ * Renders a hidden input so it plugs straight into the FormData-based
+ * submit() logic below — no changes needed there.
+ */
+function PremiumProblemSelect({
+  name,
+  placeholder,
+  options,
+}: {
+  name: string
+  placeholder: string
+  options: string[]
+}) {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
+  const [mounted, setMounted] = useState(false)
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  // Portals need the DOM, so only render one after mount (SSR-safe).
+  useEffect(() => setMounted(true), [])
+
+  function updateCoords() {
+    if (!buttonRef.current) return
+    const rect = buttonRef.current.getBoundingClientRect()
+    setCoords({ top: rect.bottom + 8, left: rect.left, width: rect.width })
+  }
+
+  // Computed BEFORE the panel opens (not in an effect after it renders),
+  // so React batches the coords + open state into one paint and the panel
+  // never flashes at {0,0} before jumping into place.
+  function toggleOpen() {
+    if (!open) updateCoords()
+    setOpen((prev) => !prev)
+  }
+
+  // Once open, keep it glued to the trigger on scroll (capture:true also
+  // catches the card's internal overflow-y-auto scroll, not just the
+  // window) or resize.
+  useEffect(() => {
+    if (!open) return
+    window.addEventListener("scroll", updateCoords, true)
+    window.addEventListener("resize", updateCoords)
+    return () => {
+      window.removeEventListener("scroll", updateCoords, true)
+      window.removeEventListener("resize", updateCoords)
+    }
+  }, [open])
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(target) &&
+        panelRef.current &&
+        !panelRef.current.contains(target)
+      ) {
+        setOpen(false)
+      }
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false)
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [])
+
+  const panel = (
+    <div
+      ref={panelRef}
+      role="listbox"
+      style={{ position: "fixed", top: coords.top, left: coords.left, width: coords.width, zIndex: 9999 }}
+      className={`origin-top overflow-hidden rounded-2xl border border-black/10 bg-white shadow-2xl shadow-black/20 transition-[opacity,transform] duration-200 ease-out ${
+        open ? "pointer-events-auto scale-100 opacity-100" : "pointer-events-none scale-95 opacity-0"
+      }`}
+    >
+      <ul className="max-h-64 overflow-y-auto py-1.5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black/10 [&::-webkit-scrollbar-track]:bg-transparent">
+        {options.map((option) => {
+          const active = option === value
+          return (
+            <li key={option}>
+              <button
+                type="button"
+                role="option"
+                aria-selected={active}
+                onClick={() => {
+                  setValue(option)
+                  setOpen(false)
+                }}
+                className={`flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm transition-colors duration-150 ${
+                  active ? "bg-yellow/15 font-semibold text-black" : "text-black/70 hover:bg-black/5"
+                }`}
+              >
+                <span className="truncate">{option}</span>
+                {active && <Check aria-hidden="true" className="size-4 shrink-0 text-black" />}
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* Keeps FormData.get("problem") working exactly as before */}
+      <input type="hidden" name={name} value={value} />
+
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={toggleOpen}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        className={`flex w-full items-center justify-between rounded-xl border bg-cream/40 px-4 py-2.5 text-sm shadow-sm transition-all duration-200 ${
+          open ? "border-yellow ring-2 ring-yellow/30" : "border-black/10 hover:border-black/20"
+        } ${value ? "text-black" : "text-black/40"}`}
+      >
+        <span className="truncate">{value || placeholder}</span>
+        <ChevronDown
+          aria-hidden="true"
+          className={`ml-2 size-4 shrink-0 transition-transform duration-200 ${
+            open ? "rotate-180 text-black" : "text-black/40"
+          }`}
+        />
+      </button>
+
+      {/* Rendered into document.body so the card's overflow-y-auto and
+          rounded corners can never clip the open panel. */}
+      {mounted ? createPortal(panel, document.body) : null}
+    </div>
+  )
+}
+
+function HeroAppointmentForm() {
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle")
+  const [submitting, setSubmitting] = useState(false)
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setSubmitting(true)
+    const values = new FormData(event.currentTarget)
+    const problem = values.get("problem")
+
+    try {
+      // TODO: point this at your real endpoint / payload shape.
+      const response = await fetch("/api/appointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: values.get("name"),
+          phone: values.get("phone"),
+          dogBreed: values.get("breed"),
+          dogAge: values.get("age"),
+          mainProblem: problem || "Not specified",
+          remarks: values.get("remarks"),
+        }),
+      })
+      const result = await response.json()
+      if (!response.ok || !result.success) throw new Error("Submission failed")
+      setStatus("success")
+      event.currentTarget.reset()
+    } catch {
+      setStatus("error")
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 rounded-2xl bg-yellow/15 px-6 py-10 text-center text-black">
+        <CheckCircle2 className="size-10 text-black" aria-hidden="true" />
+        <h3 className="text-lg font-bold">Request received</h3>
+        <p className="text-sm leading-6 text-black/70">
+          Thank you! Our team will call you shortly to confirm your appointment.
+        </p>
+        <button
+          type="button"
+          onClick={() => setStatus("idle")}
+          className="mt-2 rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white"
+        >
+          Book another appointment
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={submit} className="flex flex-col gap-3.5">
+      <input
+        required
+        name="name"
+        placeholder="Enter your name"
+        className="w-full rounded-xl border border-black/10 bg-cream/40 px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/30"
+      />
+      <input
+        required
+        name="phone"
+        type="tel"
+        inputMode="tel"
+        placeholder="Enter your phone number"
+        className="w-full rounded-xl border border-black/10 bg-cream/40 px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/30"
+      />
+
+      <div className="grid grid-cols-2 gap-3">
+        <input
+          name="breed"
+          placeholder="Dog Breed"
+          className="w-full rounded-xl border border-black/10 bg-cream/40 px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/30"
+        />
+        <input
+          name="age"
+          placeholder="Dog Age"
+          className="w-full rounded-xl border border-black/10 bg-cream/40 px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/30"
+        />
+      </div>
+
+      {/* ── Premium custom dropdown (was a native <select>) ── */}
+      <PremiumProblemSelect name="problem" placeholder="Main Problem" options={PROBLEMS} />
+
+      <textarea
+        name="remarks"
+        rows={3}
+        placeholder="Anything else we should know?"
+        className="w-full resize-none rounded-xl border border-black/10 bg-cream/40 px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:border-yellow focus:outline-none focus:ring-2 focus:ring-yellow/30"
+      />
+
+      {status === "error" && (
+        <p role="alert" className="text-sm text-red-600">
+          Unable to submit right now. Please try again.
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="mt-1 h-12 w-full rounded-full bg-yellow text-sm font-bold text-black shadow-lg shadow-yellow/30 transition-all hover:-translate-y-0.5 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+      >
+        {submitting ? "Sending…" : "Submit"}
+      </button>
+    </form>
+  )
+}
+
+function AppointmentFormCard() {
+  return (
+    <div className="flex h-full flex-col rounded-3xl border-t-4 border-yellow bg-white p-6 shadow-2xl shadow-black/20 sm:p-7">
+      <p className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-yellow px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.06em] text-black">
+        🐾 Book Appointment
+      </p>
+      <div className="mt-4 min-h-0 flex-1 overflow-y-auto md:pr-1">
+        <HeroAppointmentForm />
+      </div>
+    </div>
+  )
+}
 
 export function Hero() {
   return (
-    <section
-      id="home"
-      className="relative isolate overflow-hidden bg-black"
-    >
-      {/* Full-bleed photo — art-directed per breakpoint:
-          portrait crop below 640px, landscape crop from 640px up. */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 sm:hidden">
-          <Image
-            src="/trainer-husky-hero-portrait.png"
-            alt="Trainer kneeling beside a calm, well-trained husky on a leash"
-            fill
-            priority
-            sizes="calc(100vw - 17px)"
-            className="object-cover object-[center_20%]"
-          />
-        </div>
-        <div className="absolute inset-0 hidden sm:block">
-          <Image
-            src="/trainer-husky-hero-landscape.png"
-            alt="Trainer kneeling beside a calm, well-trained husky on a leash"
-            fill
-            priority
-            sizes="calc(100vw - 17px)"
-            className="object-cover object-[70%_center]"
-          />
-        </div>
-        {/* Mobile: full dark wash so text stays legible over the whole photo */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-black/45 to-black/35 lg:hidden" />
-        {/* Desktop: photo stays crisp on the right, fades to solid black on the left for the text column */}
-        <div className="absolute inset-0 hidden bg-gradient-to-r from-black/75 via-black/50 to-white/15 lg:block" />
+    <section id="home" role="region" aria-label="Obedience Masters — book a training session" className="relative w-full bg-amber-50">
+      {/*
+        ── Mobile (< 768px) ──
+        Container is locked to the photo's real 9:13 ratio, so the full
+        portrait always renders with ZERO cropping — no aspect guess that
+        can clip the trainer, dog, or the baked-in headline text.
+      */}
+      <div className="relative w-full md:hidden" style={{ aspectRatio: "9 / 13" }}>
+        <Image
+          src="/hero-916.png"
+          alt="Professional dog trainer with a well-trained husky in Hyderabad"
+          fill
+          priority
+          sizes="(max-width: 767px) 100vw, 0px"
+          className="object-cover object-top"
+        />
       </div>
 
-      {/* Subtle brand glow, echoes the yellow arc in the logo without competing with the photo */}
-      <div className="pointer-events-none absolute -left-32 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-yellow/10 blur-3xl" />
-
-      <div className="container-px relative mx-auto flex min-h-[560px] max-w-7xl items-center py-20 lg:min-h-[680px]">
-        <div className="max-w-xl">
-          <p className="inline-flex items-center gap-2 rounded-full bg-yellow px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-black">
-            <span aria-hidden className="text-sm">🐾</span>
-            Trusted Dog Training Experts
-          </p>
-
-          <h1 className="font-display mt-6 text-[2.5rem] font-extrabold leading-[1.1] tracking-tight text-white sm:text-6xl">
-            &ldquo;Oh No!&rdquo; to{" "}
-            <span className="text-yellow">&ldquo;That&rsquo;s My Dog!&rdquo;</span>
-          </h1>
-
-          <p className="mt-6 text-lg leading-relaxed text-white/70">
-            Expert-led training that transforms untruly habits into lasting obedience. Build confidence, trust, and a stronger connection with your dog guided by professionals who know what works.
-          </p>
-
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href="#contact"
-              className="rounded-full bg-yellow px-7 py-3.5 text-[15px] font-semibold text-black shadow-[0_10px_24px_-6px_rgba(255,181,0,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-6px_rgba(255,181,0,0.6)]"
-            >
-              Schedule dog training
-            </a>
-            {/* <a
-              href="#services"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-black shadow-[0_10px_24px_-6px_rgba(0,0,0,0.3)] transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Our Services
-              <ArrowRight size={16} />
-            </a> */}
-          </div>
-
-          <dl className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-white/15 pt-7">
-            {stats.map((stat, i) => (
-              <div key={stat.label} className="flex items-center gap-8">
-                <div>
-                  <dt className="sr-only">{stat.label}</dt>
-                  <dd className="font-display text-2xl font-extrabold text-white">
-                    {stat.value}
-                  </dd>
-                  <dd className="text-[13px] font-medium text-white/60">
-                    {stat.label}
-                  </dd>
-                </div>
-                {i < stats.length - 1 && (
-                  <span aria-hidden className="hidden h-9 w-px bg-white/15 sm:block" />
-                )}
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        {/* Floating credential card, anchored over the photo on larger screens */}
-        <div className="absolute bottom-10 right-6 hidden items-center gap-3 rounded-2xl bg-yellow px-5 py-4 shadow-[0_16px_32px_-10px_rgba(0,0,0,0.4)] sm:right-10 lg:flex">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-black text-lg">
-            🐾
-          </span>
-          <div className="leading-tight">
-            <p className="text-sm font-bold text-black">Certified &amp; Insured</p>
-            <p className="text-[13px] text-black/60">Professional trainers</p>
-          </div>
+      {/*
+        ═══ Book appointment form — mobile only ═══
+        A separate block below the image, pulled up with a negative margin
+        so it overlaps the clear grass at the bottom of the photo instead
+        of sitting in plain black space beneath it. Tune the -mt value to
+        how much clear ground your actual hero-916.png leaves below the text.
+      */}
+      <div className="relative z-10 -mt-16 px-4 pb-10 sm:-mt-24 sm:px-6 md:hidden">
+        <div className="mx-auto w-full max-w-md">
+          <AppointmentFormCard />
         </div>
       </div>
 
-      <WaveDivider color="var(--color-cream)" position="bottom" />
+      {/*
+        ── Tablet/Desktop (>= 768px) ──
+        16 / 9 matches the photo's real ratio (was 16 / 7, which was far
+        wider/shorter than the source image — that forced object-cover to
+        crop a lot of vertical height at every desktop width, and with only
+        object-left set, that crop defaulted to vertical-center, chopping
+        the headline text and the dog's feet off the bottom).
+
+        object-[left_bottom]: on the rare width where cropping is still
+        needed (narrow end of the md/lg range), it now trims from the TOP
+        (empty sky/treeline) and keeps the bottom-left — trainer, dog, and
+        the baked-in headline — fully in frame.
+      */}
+      <div className="relative hidden w-full md:block" style={{ aspectRatio: "16 / 9" }}>
+        <Image
+          src="/hero-16-9.png"
+          alt="Professional dog trainer with a well-trained husky in Hyderabad"
+          fill
+          priority
+          sizes="(min-width: 768px) 100vw, 0px"
+          className="object-cover object-[left_bottom]"
+        />
+
+        {/*
+          max-h-[90%] (was a forced h-[85%]): the card now only shrinks to
+          fit — and only scrolls internally via the overflow-y-auto on its
+          form wrapper — if it genuinely doesn't fit the available height.
+          At normal desktop viewport heights (800px+), with the container
+          now correctly sized to 16:9, the card renders at its natural
+          height with the Submit button fully visible, no scroll needed.
+        */}
+        <div className="absolute right-8 top-1/2 z-10 max-h-[90%] w-[300px] max-w-md -translate-y-1/2 lg:right-16 lg:w-[370px] xl:w-[420px]">
+          <AppointmentFormCard />
+        </div>
+      </div>
     </section>
-  );
+  )
 }

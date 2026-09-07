@@ -4,29 +4,38 @@ import { Logo } from "./Logo";
 
 function InstagramIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2" />
-      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
-      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
+    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ig-gradient" cx="30%" cy="107%" r="150%">
+          <stop offset="0%" stopColor="#FFDD55" />
+          <stop offset="10%" stopColor="#FFDD55" />
+          <stop offset="50%" stopColor="#FD1D1D" />
+          <stop offset="100%" stopColor="#833AB4" />
+        </radialGradient>
+      </defs>
+      <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig-gradient)" />
+      <circle cx="12" cy="12" r="4.6" stroke="white" strokeWidth="1.8" fill="none" />
+      <circle cx="17.15" cy="6.85" r="1.15" fill="white" />
     </svg>
   );
 }
 
 function YoutubeIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="2.5" y="5.5" width="19" height="13" rx="4" stroke="currentColor" strokeWidth="2" />
-      <path d="M10.5 9.5v5l4.5-2.5-4.5-2.5Z" fill="currentColor" />
+    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1.5" y="5" width="21" height="14" rx="4.5" fill="#FF0000" />
+      <path d="M10.3 9.3v5.4l4.9-2.7-4.9-2.7Z" fill="white" />
     </svg>
   );
 }
 
 function FacebookIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" fill="#1877F2" />
       <path
-        d="M14 8.5h2V5.5h-2c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h2.2l.8-3H13v-2c0-.55.45-1 1-1Z"
-        fill="currentColor"
+        d="M15 8.5h1.5V5.7h-1.9c-2 0-3.3 1.5-3.3 3.6v1.7H9v3.1h2.3V18.3h3.1v-4.2h2.2l.4-3.1h-2.6v-1.4c0-.6.2-1.1.9-1.1Z"
+        fill="white"
       />
     </svg>
   );
@@ -75,7 +84,7 @@ export function Footer() {
           </nav>
         </div>
 
-                <div>
+        <div>
           <p className="text-sm font-bold text-black">Contact Us</p>
           <a
             href="tel:+919700030338"
@@ -98,9 +107,10 @@ export function Footer() {
               <a
                 key={label}
                 target="_blank"
+                rel="noopener noreferrer"
                 href={href}
                 aria-label={label}
-                className="grid h-9 w-9 place-items-center rounded-full bg-black/10 text-black transition-colors hover:bg-black hover:text-yellow"
+                className="grid h-9 w-9 place-items-center rounded-full bg-white shadow-sm ring-1 ring-black/5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               >
                 <Icon />
               </a>
