@@ -96,7 +96,7 @@ export function Footer() {
             href="mailto:msolomonmoony@gmail.com"
             className="mt-2 flex items-center gap-2 text-[15px] font-medium text-black/80 hover:text-black"
           >
-            <Mail size={16} /> msolomonmoony@gmail.com
+            <Mail size={16} /> obediencemasters@gmail.com
           </a>
         </div>
 
