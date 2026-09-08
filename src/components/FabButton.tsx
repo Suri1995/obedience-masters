@@ -1,11 +1,9 @@
 // FabButton.tsx
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface FabButtonProps {
-  href: string;
-  external?: boolean;
   ariaLabel: string;
   label: string;
   icon: ReactNode;
@@ -20,6 +18,19 @@ interface FabButtonProps {
   peekDelay?: number;
   /** how long the auto-peek stays open before collapsing */
   peekDuration?: number;
+  /** popover open state — lifted to the parent so only one FAB is open at a time */
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  /** heading shown at the top of the popover panel (used when popoverHeader isn't provided) */
+  popoverTitle: string;
+  /**
+   * Optional full-bleed colored header (brand icon + name), like a chat
+   * widget's title bar. When provided this replaces the plain text title.
+   */
+  popoverHeader?: ReactNode;
+  /** actual actionable content (tel:/wa.me links, message preview, etc.) */
+  popoverContent: ReactNode;
 }
 
 const EASE = "ease-[cubic-bezier(0.16,1,0.3,1)]";
@@ -28,16 +39,19 @@ const EASE = "ease-[cubic-bezier(0.16,1,0.3,1)]";
  * Shared floating-action-button primitive. Both CallButton and
  * WhatsAppButton render through this so they always stay visually
  * consistent — same shadow language, same motion curve, same tooltip
- * behavior. Only the icon, gradient, and copy differ per button.
+ * and popover behavior. Only the icon, gradient, copy, and popover
+ * content differ per button.
  *
- * Motion sequence: fade/slide in -> pause -> label auto-peeks open once
- * (so the action is discoverable without a hover, including on touch
- * devices) -> collapses back to icon-only -> label re-opens on hover
- * from then on. No looping ambient animation — one clean moment, then still.
+ * Interaction model (matches the amma-eye-care-style FAB stack):
+ * - Entrance: fade/slide in on mount.
+ * - Discovery: label auto-peeks open once shortly after entrance, then
+ *   collapses back to icon-only. No looping ambient animation.
+ * - Click/tap the icon: toggles a small popup panel above the button
+ *   containing the actual action (call number, WhatsApp chat starter).
+ *   Clicking outside the panel, pressing Escape, or toggling the other
+ *   FAB closes it.
  */
 export default function FabButton({
-  href,
-  external,
   ariaLabel,
   label,
   icon,
@@ -49,10 +63,18 @@ export default function FabButton({
   entranceDelay = 500,
   peekDelay = 900,
   peekDuration = 2600,
+  isOpen,
+  onToggle,
+  onClose,
+  popoverTitle,
+  popoverHeader,
+  popoverContent,
 }: FabButtonProps) {
   const [visible, setVisible] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [peeking, setPeeking] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), entranceDelay);
@@ -69,22 +91,70 @@ export default function FabButton({
     };
   }, [visible, peekDelay, peekDuration]);
 
-  const labelShown = hovered || peeking;
+  // Close the popover on outside click / Escape while it's open.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") onClose();
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  // Hide the hover/peek label tooltip whenever the popover itself is open.
+  const labelShown = !isOpen && (hovered || peeking);
 
   return (
-    <a
-      href={href}
-      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      aria-label={ariaLabel}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
-      onBlur={() => setHovered(false)}
-      className={`group flex items-center gap-3 outline-none transition-all duration-500 ${EASE} motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+    <div
+      ref={containerRef}
+      className={`relative flex items-center gap-3 transition-all duration-500 ${EASE} motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
         visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       }`}
     >
-      {/* Label pill with connecting caret, anchored to the button rather than floating free */}
+      {/* Popover panel — the actual action lives here, anchored above the icon */}
+      <div
+        role="dialog"
+        aria-label={popoverTitle}
+        aria-hidden={!isOpen}
+        className={`absolute bottom-[calc(100%+14px)] right-0 w-[280px] origin-bottom-right overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-[0_2px_6px_rgba(15,15,15,0.04),0_20px_40px_-14px_rgba(15,15,15,0.28)] transition-all duration-300 ${EASE} motion-reduce:transition-none ${
+          isOpen
+            ? "pointer-events-auto scale-100 opacity-100"
+            : "pointer-events-none scale-95 opacity-0"
+        }`}
+      >
+        {popoverHeader ?? (
+          <p className="px-4 pt-4 text-[13px] font-bold tracking-[-0.01em] text-neutral-900">
+            {popoverTitle}
+          </p>
+        )}
+
+        <div className={popoverHeader ? "p-4" : "px-4 pb-4 pt-2.5"}>
+          {popoverContent}
+        </div>
+
+        <span
+          className="absolute -bottom-[6px] right-6 h-3 w-3 rotate-45 border-b border-r border-black/[0.06] bg-white"
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* Label pill — hover/peek tooltip, hidden while the popover is open */}
       <span
         className={`relative flex items-center whitespace-nowrap rounded-[14px] border border-black/[0.06] bg-white px-4 py-2.5 text-[13px] font-semibold tracking-[-0.01em] text-neutral-800 shadow-[0_2px_6px_rgba(15,15,15,0.04),0_14px_28px_-12px_rgba(15,15,15,0.24)] transition-all duration-300 ${EASE} motion-reduce:transition-none ${
           labelShown
@@ -99,8 +169,19 @@ export default function FabButton({
         />
       </span>
 
-      {/* Icon button */}
-      <span className="relative flex h-14 w-14 shrink-0 items-center justify-center">
+      {/* Icon button — toggles the popover open/closed */}
+      <button
+        type="button"
+        aria-label={ariaLabel}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        onClick={onToggle}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onFocus={() => setHovered(true)}
+        onBlur={() => setHovered(false)}
+        className="group relative flex h-14 w-14 shrink-0 items-center justify-center outline-none"
+      >
         {/* hairline brand-tinted ring, sits just outside the disc for separation from busy backgrounds */}
         <span
           className="absolute -inset-[3px] rounded-full transition-shadow duration-300"
@@ -119,7 +200,13 @@ export default function FabButton({
             className="pointer-events-none absolute inset-x-1 top-1 h-6 rounded-full bg-white/25 blur-[6px]"
             aria-hidden="true"
           />
-          <span className="relative">{icon}</span>
+          <span
+            className={`relative transition-transform duration-300 ${EASE} ${
+              isOpen ? "rotate-90 scale-90" : "rotate-0 scale-100"
+            }`}
+          >
+            {icon}
+          </span>
         </span>
 
         {showOnlineDot && (
@@ -133,7 +220,7 @@ export default function FabButton({
             </span>
           </span>
         )}
-      </span>
-    </a>
+      </button>
+    </div>
   );
 }

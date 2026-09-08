@@ -426,7 +426,16 @@ export function Hero() {
           className="object-cover object-[left_bottom]"
         />
 
-        <div className="absolute right-8 top-1/2 z-10 h-[90%] w-[300px] max-w-md -translate-y-1/2 lg:right-16 md:w-[250px] lg:h-[90%] lg:w-[300px] xl:h-auto xl:w-[420px]">
+        {/*
+          Card sizing:
+          - md / lg / xl (up to ~1366px screens): fixed 450px height with
+            internal scroll (see AppointmentFormCard's overflow-y-auto
+            inner wrapper), so the form never overflows the hero image.
+          - 2xl and above (>=1536px, e.g. large desktop monitors): switch
+            back to a percentage-based auto height since there's enough
+            vertical room.
+        */}
+        <div className="absolute right-8 top-1/2 z-10 h-[450px] sm:h-[380px] lg:h-[450px] w-[300px] max-w-md -translate-y-1/2 overflow-hidden lg:right-16 md:w-[250px] lg:w-[300px] xl:w-[450px] 2xl:h-[90%] 2xl:max-h-[600px]">
           <AppointmentFormCard />
         </div>
       </div>

@@ -20,10 +20,9 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <TrustStats />
+        <Services />
         <BehaviorChallenges />
         <ProcessSteps />
-        <Services />
         <WhyChooseUs />
         <BeforeAfter />
         <Testimonials />
@@ -32,6 +31,7 @@ export default function Home() {
         <ComponentGallery />
         <FAQ />
         <CTAForm />
+        <TrustStats />
       </main>
       <Footer />
     </>
