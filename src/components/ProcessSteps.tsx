@@ -66,7 +66,7 @@ export function ProcessSteps() {
             {steps.map((step) => (
               <div
                 key={step.title}
-                className="group flex flex-col rounded-2xl border border-black/10 bg-black/[0.04] p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-black/20 hover:bg-black/[0.07]"
+                className="group flex flex-col rounded-2xl border-2 border-yellow/60 bg-white/90 p-6 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25)] backdrop-blur-xl backdrop-saturate-150 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/55"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black font-display text-sm font-extrabold text-yellow transition-transform duration-300 group-hover:scale-105">
                   {step.number}
