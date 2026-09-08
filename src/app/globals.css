@@ -132,3 +132,106 @@ textarea:focus-visible {
     padding-right: 5rem;
   }
 }
+
+.policy-copy {
+  color: var(--color-ink);
+}
+
+.policy-section {
+  scroll-margin-top: 7rem;
+}
+
+.policy-section + .policy-section {
+  margin-top: 4rem;
+  padding-top: 4rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.policy-copy h2 {
+  margin-bottom: 1.25rem;
+  color: var(--color-black);
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  line-height: 1.1;
+}
+
+.policy-copy h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+  color: var(--color-black);
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.policy-copy p,
+.policy-copy li,
+.policy-copy dd {
+  color: var(--color-ink-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.policy-copy p + p,
+.policy-copy p + ul,
+.policy-copy ul + p,
+.policy-copy h3 + p {
+  margin-top: 1rem;
+}
+
+.policy-copy ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 1rem 0;
+  padding-left: 1.35rem;
+  list-style: disc;
+}
+
+.policy-copy li::marker {
+  color: var(--color-yellow-dark);
+}
+
+.policy-copy a {
+  color: var(--color-black);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--color-yellow);
+  text-underline-offset: 3px;
+}
+
+.definition-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.definition-grid > div {
+  border-radius: 1rem;
+  background: var(--color-blush-50);
+  padding: 1rem 1.1rem;
+}
+
+.definition-grid dt {
+  color: var(--color-black);
+  font-weight: 700;
+}
+
+.definition-grid dd {
+  margin-top: 0.25rem;
+}
+
+.policy-callout {
+  margin: 1.5rem 0;
+  border-radius: 1.25rem;
+  background: var(--color-mint);
+  padding: 1.25rem 1.35rem;
+}
+
+.policy-callout h3 {
+  margin-top: 0;
+}
+
+@media print {
+  header, footer, aside, select, .policy-copy + a { display: none !important; }
+  .policy-copy { box-shadow: none; border: 0; padding: 0; }
+  .policy-section + .policy-section { break-before: page; }
+}
