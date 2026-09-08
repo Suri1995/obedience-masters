@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <>
-      <Navbar />
       <main id="top" className="overflow-hidden">
         <section className="container-px mx-auto max-w-7xl pb-12 pt-16 sm:pt-24 lg:pb-16 lg:pt-28">
           <div className="mb-10 flex items-center justify-between gap-4">
