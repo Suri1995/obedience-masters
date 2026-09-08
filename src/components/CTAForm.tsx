@@ -2,13 +2,28 @@
 
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
-import { Sparkles, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+  Sparkles,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 
 type Status = "idle" | "loading" | "success" | "error";
 
 const months = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 export function CTAForm() {
@@ -17,22 +32,36 @@ export function CTAForm() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     if (!accepted) return;
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
     setStatus("loading");
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...data,
+          source: "cta",
+        }),
       });
-      if (!res.ok) throw new Error("Request failed");
+
+      const result = await res.json();
+
+      if (!res.ok || !result.success) {
+        throw new Error(result.error || "Request failed");
+      }
+
       setStatus("success");
       form.reset();
-    } catch {
+    } catch (error) {
+      console.error("CTA form error:", error);
       setStatus("error");
     }
   }
@@ -46,10 +75,12 @@ export function CTAForm() {
               <span className="h-1.5 w-1.5 rounded-full bg-black" />
               Get Started
             </span>
+
             <h2 className="mt-5 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
               Your Dog Is Ready.{" "}
               <span className="text-yellow">Are You?</span>
             </h2>
+
             <p className="mt-4 text-[15px] text-white/60">
               Let&rsquo;s turn everyday challenges into happy moments, one
               step at a time.
@@ -59,6 +90,7 @@ export function CTAForm() {
               <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-black">
                 <Sparkles size={14} className="text-yellow" />
               </span>
+
               <p className="text-[15px] font-semibold text-black">
                 Your dog doesn&rsquo;t need to be perfect. They just need the
                 right guidance.
@@ -77,33 +109,74 @@ export function CTAForm() {
           </div>
 
           <div className="rounded-[2rem] bg-white p-8 shadow-[0_25px_60px_-30px_rgba(0,0,0,0.3)] ring-1 ring-black/5">
-            <h3 className="text-xl font-bold text-black">Your Pet Details</h3>
+            <h3 className="text-xl font-bold text-black">
+              Your Pet Details
+            </h3>
+
             <p className="mt-1 text-sm text-ink-muted">
               Tell us a bit about your dog and we&rsquo;ll follow up to
               schedule your first session.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-              <Field label="Full Name" name="fullName" placeholder="Name" required />
-              <Field label="Owner Phone Number" name="phone" placeholder="Number" type="tel" required />
-              <Field label="Breed" name="breed" placeholder="e.g. Golden Retriever" required />
-              <Field label="Dog's Age" name="age" placeholder="Age of dog" required />
-              <Field label="Email" name="email" placeholder="you@email.com" type="email" required />
+            <form
+              onSubmit={handleSubmit}
+              className="mt-6 flex flex-col gap-4"
+            >
+              <Field
+                label="Full Name"
+                name="fullName"
+                placeholder="Name"
+                required
+              />
+
+              <Field
+                label="Owner Phone Number"
+                name="phone"
+                placeholder="Number"
+                type="tel"
+                required
+              />
+
+              <Field
+                label="Breed"
+                name="breed"
+                placeholder="e.g. Golden Retriever"
+                required
+              />
+
+              <Field
+                label="Dog's Age"
+                name="age"
+                placeholder="Age of dog"
+                required
+              />
+
+              <Field
+                label="Email"
+                name="email"
+                placeholder="you@email.com"
+                type="email"
+                required
+              />
 
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-ink">
                   Schedule Date
                 </label>
+
                 <div className="grid grid-cols-2 gap-3">
                   <select
                     name="month"
                     defaultValue="Sep"
                     className="rounded-xl border border-black/10 bg-cream px-4 py-2.5 text-sm text-ink transition-colors focus:border-black focus:outline-none focus:ring-2 focus:ring-yellow/50"
                   >
-                    {months.map((m) => (
-                      <option key={m} value={m}>{m}</option>
+                    {months.map((month) => (
+                      <option key={month} value={month}>
+                        {month}
+                      </option>
                     ))}
                   </select>
+
                   <select
                     name="year"
                     defaultValue="2026"
@@ -123,6 +196,7 @@ export function CTAForm() {
                 {status === "loading" && (
                   <Loader2 size={18} className="animate-spin" />
                 )}
+
                 {status === "success" ? "Request Sent!" : "Submit"}
               </button>
 
@@ -132,6 +206,7 @@ export function CTAForm() {
                   Thanks! We&rsquo;ll reach out within 24 hours.
                 </p>
               )}
+
               {status === "error" && (
                 <p className="flex items-center gap-2 rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-medium text-red-600">
                   <AlertCircle size={16} className="shrink-0" />
@@ -161,9 +236,13 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-ink">
+      <label
+        htmlFor={name}
+        className="mb-1.5 block text-sm font-medium text-ink"
+      >
         {label}
       </label>
+
       <input
         id={name}
         name={name}
