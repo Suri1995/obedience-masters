@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Sparkles,
@@ -27,6 +28,7 @@ const months = [
 ];
 
 export function CTAForm() {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>("idle");
   const [accepted, setAccepted] = useState(true);
 
@@ -58,8 +60,8 @@ export function CTAForm() {
         throw new Error(result.error || "Request failed");
       }
 
-      setStatus("success");
       form.reset();
+      router.push("/thank-you");
     } catch (error) {
       console.error("CTA form error:", error);
       setStatus("error");
