@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Sparkles,
   Loader2,
-  CheckCircle2,
   AlertCircle,
 } from "lucide-react";
 
-type Status = "idle" | "loading" | "success" | "error";
+type Status = "idle" | "loading" | "error";
 
 const months = [
   "Jan",
@@ -27,6 +27,7 @@ const months = [
 ];
 
 export function CTAForm() {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>("idle");
   const [accepted, setAccepted] = useState(true);
 
@@ -58,8 +59,14 @@ export function CTAForm() {
         throw new Error(result.error || "Request failed");
       }
 
-      setStatus("success");
       form.reset();
+
+      // Navigate to the dedicated thank-you page instead of showing
+      // an inline confirmation message.
+      const name =
+        typeof data.fullName === "string" ? data.fullName : "";
+
+      router.push(`/thankyou?name=${encodeURIComponent(name)}`);
     } catch (error) {
       console.error("CTA form error:", error);
       setStatus("error");
@@ -197,15 +204,8 @@ export function CTAForm() {
                   <Loader2 size={18} className="animate-spin" />
                 )}
 
-                {status === "success" ? "Request Sent!" : "Submit"}
+                Submit
               </button>
-
-              {status === "success" && (
-                <p className="flex items-center gap-2 rounded-xl bg-emerald-50 px-3.5 py-2.5 text-sm font-medium text-emerald-700">
-                  <CheckCircle2 size={16} className="shrink-0" />
-                  Thanks! We&rsquo;ll reach out within 24 hours.
-                </p>
-              )}
 
               {status === "error" && (
                 <p className="flex items-center gap-2 rounded-xl bg-red-50 px-3.5 py-2.5 text-sm font-medium text-red-600">

@@ -26,6 +26,96 @@ function escapeHtml(value: string = "") {
     .replace(/'/g, "&#039;");
 }
 
+// ---------------------------------------------
+// SHARED EMAIL SHELL
+// A single branded wrapper (dark header, yellow
+// accent, rounded content card) reused by both
+// the lead-notification email and the customer
+// thank-you email, so they look like they came
+// from the same premium, consistent brand.
+// ---------------------------------------------
+
+function emailShell({
+  eyebrow,
+  heading,
+  intro,
+  bodyHtml,
+  footerNote,
+}: {
+  eyebrow: string;
+  heading: string;
+  intro?: string;
+  bodyHtml: string;
+  footerNote: string;
+}) {
+  return `
+  <div style="background-color:#FAF6EC;padding:32px 16px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <div style="max-width:600px;margin:0 auto;">
+
+      <!-- Header -->
+      <div style="background-color:#0B0B0B;border-radius:24px 24px 0 0;padding:32px 36px;text-align:center;">
+        <div style="display:inline-flex;align-items:center;gap:8px;">
+          <span style="font-size:20px;">🐾</span>
+        </div>
+        <p style="margin:10px 0 0;font-size:12px;font-weight:700;letter-spacing:1.5px;color:#FFB800;text-transform:uppercase;">
+          Obedience Masters
+        </p>
+        <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.5);">
+          Professional Dog Training
+        </p>
+      </div>
+
+      <!-- Card -->
+      <div style="background-color:#FFFFFF;border:1px solid rgba(0,0,0,0.06);border-top:none;border-radius:0 0 24px 24px;padding:36px;box-shadow:0 25px 60px -30px rgba(0,0,0,0.25);">
+
+        <span style="display:inline-block;background-color:#FFF3CC;color:#0B0B0B;font-size:12px;font-weight:700;letter-spacing:0.5px;padding:6px 14px;border-radius:999px;">
+          ${eyebrow}
+        </span>
+
+        <h1 style="margin:16px 0 0;font-size:24px;line-height:1.3;color:#0B0B0B;font-weight:800;">
+          ${heading}
+        </h1>
+
+        ${
+          intro
+            ? `<p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:#57534E;">${intro}</p>`
+            : ""
+        }
+
+        <div style="margin-top:24px;">
+          ${bodyHtml}
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div style="text-align:center;padding:24px 12px 0;">
+        <p style="margin:0;font-size:13px;color:#8A8580;">
+          ${footerNote}
+        </p>
+        <p style="margin:8px 0 0;font-size:12px;color:#B5B0AA;">
+          Obedience Masters &middot; Hyderabad, India
+        </p>
+      </div>
+
+    </div>
+  </div>
+  `;
+}
+
+function detailRow(label: string, value: string) {
+  return `
+    <tr>
+      <td style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:13px;color:#8A8580;width:38%;vertical-align:top;">
+        ${escapeHtml(label)}
+      </td>
+      <td style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:14px;color:#0B0B0B;font-weight:600;vertical-align:top;">
+        ${escapeHtml(value)}
+      </td>
+    </tr>
+  `;
+}
+
 export async function POST(request: Request) {
   try {
     const body: ContactPayload = await request.json();
@@ -101,94 +191,54 @@ export async function POST(request: Request) {
     const leadId = result[0]?.id;
 
     // ---------------------------------------------
-    // SEND LEAD NOTIFICATION
+    // SEND LEAD NOTIFICATION (premium internal email)
     // ---------------------------------------------
 
-    const notificationHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; padding: 24px;">
-        <h2 style="margin-bottom: 20px;">
-          New Dog Training Lead
-        </h2>
+    const scheduleValue = [month, year].filter(Boolean).join(" ");
 
-        <div style="background: #f5f5f5; padding: 20px; border-radius: 12px;">
-          <p>
-            <strong>Lead ID:</strong>
-            ${escapeHtml(String(leadId ?? ""))}
-          </p>
-
-          <p>
-            <strong>Source:</strong>
-            ${escapeHtml(source)}
-          </p>
-
-          <hr />
-
-          <p>
-            <strong>Owner Name:</strong>
-            ${escapeHtml(fullName)}
-          </p>
-
-          <p>
-            <strong>Phone:</strong>
-            ${escapeHtml(phone)}
-          </p>
-
-          <p>
-            <strong>Email:</strong>
-            ${escapeHtml(email || "Not provided")}
-          </p>
-
-          <p>
-            <strong>Dog Breed:</strong>
-            ${escapeHtml(breed || "Not provided")}
-          </p>
-
-          <p>
-            <strong>Dog Age:</strong>
-            ${escapeHtml(age || "Not provided")}
-          </p>
-
-          ${
-            month || year
-              ? `
-                <p>
-                  <strong>Preferred Schedule:</strong>
-                  ${escapeHtml(
-                    [month, year].filter(Boolean).join(" ")
-                  )}
-                </p>
-              `
-              : ""
-          }
-
-          ${
-            mainProblem
-              ? `
-                <p>
-                  <strong>Main Problem:</strong>
-                  ${escapeHtml(mainProblem)}
-                </p>
-              `
-              : ""
-          }
-
-          ${
-            remarks
-              ? `
-                <p>
-                  <strong>Remarks:</strong>
-                  ${escapeHtml(remarks)}
-                </p>
-              `
-              : ""
-          }
-        </div>
-
-        <p style="margin-top: 20px; color: #666;">
-          This lead was submitted through the Obedience Masters website.
-        </p>
+    const leadRows = `
+      <table role="presentation" width="100%" style="border-collapse:collapse;">
+        ${detailRow("Lead ID", String(leadId ?? "—"))}
+        ${detailRow("Source", source)}
+        ${detailRow("Owner name", fullName)}
+        ${detailRow("Phone", phone)}
+        ${detailRow("Email", email || "Not provided")}
+        ${detailRow("Dog breed", breed || "Not provided")}
+        ${detailRow("Dog age", age || "Not provided")}
+        ${scheduleValue ? detailRow("Preferred schedule", scheduleValue) : ""}
+        ${mainProblem ? detailRow("Main problem", mainProblem) : ""}
+      </table>
+      ${
+        remarks
+          ? `
+            <div style="margin-top:20px;background-color:#FAF6EC;border-radius:14px;padding:16px 18px;">
+              <p style="margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:0.5px;color:#8A8580;text-transform:uppercase;">
+                Remarks
+              </p>
+              <p style="margin:0;font-size:14px;line-height:1.6;color:#0B0B0B;">
+                ${escapeHtml(remarks)}
+              </p>
+            </div>
+          `
+          : ""
+      }
+      <div style="margin-top:28px;">
+        <a
+          href="tel:${encodeURIComponent(phone)}"
+          style="display:inline-block;background-color:#0B0B0B;color:#FFB800;font-size:14px;font-weight:700;text-decoration:none;padding:12px 24px;border-radius:999px;"
+        >
+          Call ${escapeHtml(fullName)}
+        </a>
       </div>
     `;
+
+    const notificationHtml = emailShell({
+      eyebrow: "New Lead",
+      heading: `${fullName} just submitted an enquiry`,
+      intro: "A new dog owner is ready to get started. Details below.",
+      bodyHtml: leadRows,
+      footerNote: "This lead was submitted through the Obedience Masters website.",
+    });
 
     const notificationEmail = await resend.emails.send({
       from:
@@ -204,56 +254,34 @@ export async function POST(request: Request) {
     console.log("Lead notification sent:", notificationEmail);
 
     // ---------------------------------------------
-    // SEND THANK-YOU EMAIL TO CUSTOMER
+    // SEND THANK-YOU EMAIL TO CUSTOMER (premium)
     // ---------------------------------------------
 
     if (email) {
-      const customerHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; padding: 24px; color: #111;">
-          
-          <h2 style="margin-bottom: 20px;">
-            Thank You for Contacting Obedience Masters!
-          </h2>
+      const customerBody = `
+        <table role="presentation" width="100%" style="border-collapse:collapse;">
+          ${detailRow("Dog breed", breed || "Not provided")}
+          ${detailRow("Dog age", age || "Not provided")}
+          ${scheduleValue ? detailRow("Preferred schedule", scheduleValue) : ""}
+        </table>
 
-          <p>
-            Hi ${escapeHtml(fullName)},
+        <div style="margin-top:24px;background-color:#FFF8DC;border-radius:14px;padding:18px 20px;">
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#0B0B0B;">
+            <strong>What happens next:</strong> one of our trainers will
+            call you within 24 hours to understand your dog&rsquo;s needs
+            and schedule your first session.
           </p>
-
-          <p>
-            Thank you for reaching out to <strong>Obedience Masters</strong>
-            regarding your dog's training.
-          </p>
-
-          <p>
-            We have successfully received your enquiry.
-            Our team will get in touch with you shortly to discuss
-            your dog's training requirements.
-          </p>
-
-          <div style="background: #fff8dc; padding: 18px; border-radius: 12px; margin: 24px 0;">
-            <p style="margin: 0 0 8px;">
-              <strong>Dog Breed:</strong>
-              ${escapeHtml(breed || "Not provided")}
-            </p>
-
-            <p style="margin: 0;">
-              <strong>Dog Age:</strong>
-              ${escapeHtml(age || "Not provided")}
-            </p>
-          </div>
-
-          <p>
-            We look forward to helping you and your dog.
-          </p>
-
-          <p style="margin-top: 28px;">
-            Regards,<br />
-            <strong>Obedience Masters</strong><br />
-            Professional Dog Training
-          </p>
-
         </div>
       `;
+
+      const customerHtml = emailShell({
+        eyebrow: "Enquiry Received",
+        heading: `Thank you, ${fullName}`,
+        intro:
+          "We&rsquo;ve received your enquiry and can&rsquo;t wait to start working with your dog.",
+        bodyHtml: customerBody,
+        footerNote: "Questions in the meantime? Just reply to this email.",
+      });
 
       const customerEmail = await resend.emails.send({
         from:
