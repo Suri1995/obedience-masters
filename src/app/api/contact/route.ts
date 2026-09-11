@@ -190,18 +190,26 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    const notificationEmail = await resend.emails.send({
-      from:
-        process.env.RESEND_FROM_EMAIL ||
-        "Obedience Masters <hello@obediencemasters.com>",
-      to:
-        process.env.LEADS_TO_EMAIL ||
-        "Obediencemasters@gmail.com",
-      subject: `New Dog Training Lead - ${fullName}`,
-      html: notificationHtml,
-    });
+    try {
+      const notificationEmail = await resend.emails.send({
+        from:
+          process.env.RESEND_FROM_EMAIL ||
+          "Obedience Masters <hello@obediencemasters.com>",
+        to:
+          process.env.LEADS_TO_EMAIL ||
+          "Obediencemasters@gmail.com",
+        subject: `New Dog Training Lead - ${fullName}`,
+        html: notificationHtml,
+      });
 
-    console.log("Lead notification sent:", notificationEmail);
+      if (notificationEmail.error) {
+        console.error("Lead notification failed:", notificationEmail.error);
+      } else {
+        console.log("Lead notification sent:", notificationEmail.data);
+      }
+    } catch (emailError) {
+      console.error("Lead notification error:", emailError);
+    }
 
     // ---------------------------------------------
     // SEND THANK-YOU EMAIL TO CUSTOMER
@@ -255,16 +263,24 @@ export async function POST(request: Request) {
         </div>
       `;
 
-      const customerEmail = await resend.emails.send({
-        from:
-          process.env.RESEND_FROM_EMAIL ||
-          "Obedience Masters <hello@obediencemasters.com>",
-        to: email,
-        subject: "Thank You for Contacting Obedience Masters",
-        html: customerHtml,
-      });
+      try {
+        const customerEmail = await resend.emails.send({
+          from:
+            process.env.RESEND_FROM_EMAIL ||
+            "Obedience Masters <hello@obediencemasters.com>",
+          to: email,
+          subject: "Thank You for Contacting Obedience Masters",
+          html: customerHtml,
+        });
 
-      console.log("Customer thank-you email sent:", customerEmail);
+        if (customerEmail.error) {
+          console.error("Customer thank-you email failed:", customerEmail.error);
+        } else {
+          console.log("Customer thank-you email sent:", customerEmail.data);
+        }
+      } catch (emailError) {
+        console.error("Customer thank-you email error:", emailError);
+      }
     }
 
     // ---------------------------------------------
